@@ -1,0 +1,30 @@
+type Phone = {
+  image: number[];
+  name: string;
+  brand: string;
+  release: string;
+  weight: number;
+  IPrating: string;
+  fastcharging: boolean;
+  colours: string;
+  DisplayRefreshRate: string;
+  Displaytype: string;
+  Displaysize: string;
+  DisplayResolution: string;
+  DisplayPPI: string;
+  hardwareprocessor: string;
+  hardwareprocessorname: string;
+  camerarear: string;
+  camerafront: string;
+  camerano: number;
+  OS: string;
+  security: string;
+  battery: string;
+  price: number;
+  buyatamazon: string;
+  buyatflipkart: string;
+  hardwareRAM: string;
+  hardwareROM: string;
+};
+
+export type { Phone };

@@ -1,0 +1,99 @@
+{
+  "kind": "collectionType",
+  "collectionName": "phones",
+  "info": {
+    "singularName": "phone",
+    "pluralName": "phones",
+    "displayName": "phone",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "release": {
+      "type": "date"
+    },
+    "weight": {
+      "type": "decimal"
+    },
+    "IPrating": {
+      "type": "string"
+    },
+    "fastcharging": {
+      "type": "boolean"
+    },
+    "colours": {
+      "type": "string"
+    },
+    "DisplayRefreshRate": {
+      "type": "string"
+    },
+    "Displaytype": {
+      "type": "string"
+    },
+    "Displaysize": {
+      "type": "string"
+    },
+    "DisplayResolution": {
+      "type": "string"
+    },
+    "hardwareprocessor": {
+      "type": "string"
+    },
+    "hardwareprocessorname": {
+      "type": "string"
+    },
+    "camerarear": {
+      "type": "string"
+    },
+    "camerafront": {
+      "type": "string"
+    },
+    "camerano": {
+      "type": "decimal"
+    },
+    "OS": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "security": {
+      "type": "string"
+    },
+    "battery": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "buyatamazon": {
+      "type": "string"
+    },
+    "buyatflipkart": {
+      "type": "string"
+    },
+    "hardwareRAM": {
+      "type": "string"
+    },
+    "hardwareROM": {
+      "type": "string"
+    },
+    "DisplayPPI": {
+      "type": "string"
+    }
+  }
+}
