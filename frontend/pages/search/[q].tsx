@@ -3,8 +3,6 @@ import {
   props,
   data,
   pagination,
-  Phones,
-  Imagedata,
 } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { GetServerSideProps } from "next";
@@ -12,6 +10,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
+import { phone } from "@/data";
+
+const Phone = new phone();
 
 const Search = (props: props) => {
   const [Data, setData] = useState<data[]>(props.data);
@@ -30,85 +31,23 @@ const Search = (props: props) => {
   }
 
   const fetchData = async () => {
-    const response = await fetch(
-      process.env.API_URL +
-        `/phones&filters[name][$containsi]=${Router.query.q}&pagination[page]=${
-          Pagination.page + 1
-        }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + process.env.API_TOKEN,
-        },
-      }
-    );
-
-    const { data, meta } = await response.json();
-
-    if (data.length == 0) {
+    if (Pagination.page === Pagination.pageCount) {
       setHasMore(false);
     }
 
-    const allData = data.map((data: Phones) => {
-      return {
-        id: data.id,
-        name: data.attributes.name,
-        price: data.attributes.price,
-        brand: data.attributes.brand,
-        display: {
-          size: data.attributes.Displaysize,
-          resolution: data.attributes.DisplayResolution,
-          type: data.attributes.Displaytype,
-          PPI: data.attributes.DisplayPPI,
-          fps: data.attributes.DisplayRefreshRate,
-        },
-        hardware: {
-          processor: data.attributes.hardwareprocessor,
-          processorName: data.attributes.hardwareprocessorname,
-          RAM: data.attributes.hardwareRAM,
-          ROM: data.attributes.hardwareROM,
-        },
-        camera: {
-          rear: data.attributes.camerarear,
-          front: data.attributes.camerafront,
-          number: data.attributes.camerano,
-        },
-        general: {
-          os: data.attributes.OS,
-          battery: data.attributes.battery,
-          weight: data.attributes.weight,
-          IPrating: data.attributes.IPrating,
-          colours: data.attributes.colours,
-          fastcharging: data.attributes.fastcharging,
-          security: data.attributes.security,
-          release: data.attributes.release,
-        },
-        buyAt: {
-          amazon:
-            data.attributes.buyatamazon == null
-              ? ""
-              : data.attributes.buyatamazon,
-          flipkart:
-            data.attributes.buyatflipkart == null
-              ? ""
-              : data.attributes.buyatflipkart,
-        },
-        image:
-          data.attributes.image.data === null
-            ? null
-            : data.attributes.image.data.map((img: Imagedata) => {
-                return {
-                  id: img.id,
-                  url: img.attributes.url,
-                  alt: img.attributes.alternativeText,
-                };
-              }),
-      };
-    });
+    const response = await Phone.getPhones(
+      process.env.API_URL +
+        `/phones&filters[name][$containsi]=${Router.query.q}&pagination[page]=${
+          Pagination.page + 1
+        }`
+    );
+
+    const { data, meta } = response;
+
+    const allData = Phone.toNormalFormatArray(data);
 
     const newData = [...Data, ...allData];
-    setData(newData);
+    setData(newData as data[]);
 
     setPagination(meta.pagination);
   };
@@ -154,79 +93,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-
-  const response = await fetch(
+  const response = await Phone.getPhones(
     process.env.API_URL +
       "/phones?populate=image&filters[name][$contains]=" +
-      ctx.query.q,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + process.env.API_TOKEN,
-      },
-    }
+      ctx.query.q
   );
-
-  const { data, meta } = await response.json();
-
-  const allData = data.map((data: Phones) => {
-    return {
-      id: data.id,
-      name: data.attributes.name,
-      price: data.attributes.price,
-      brand: data.attributes.brand,
-      display: {
-        size: data.attributes.Displaysize,
-        resolution: data.attributes.DisplayResolution,
-        type: data.attributes.Displaytype,
-        PPI: data.attributes.DisplayPPI,
-        fps: data.attributes.DisplayRefreshRate,
-      },
-      hardware: {
-        processor: data.attributes.hardwareprocessor,
-        processorName: data.attributes.hardwareprocessorname,
-        RAM: data.attributes.hardwareRAM,
-        ROM: data.attributes.hardwareROM,
-      },
-      camera: {
-        rear: data.attributes.camerarear,
-        front: data.attributes.camerafront,
-        number: data.attributes.camerano,
-      },
-      general: {
-        os: data.attributes.OS,
-        battery: data.attributes.battery,
-        weight: data.attributes.weight,
-        IPrating: data.attributes.IPrating,
-        colours: data.attributes.colours,
-        fastcharging: data.attributes.fastcharging,
-        security: data.attributes.security,
-        release: data.attributes.release,
-      },
-      buyAt: {
-        amazon:
-          data.attributes.buyatamazon == null
-            ? ""
-            : data.attributes.buyatamazon,
-        flipkart:
-          data.attributes.buyatflipkart == null
-            ? ""
-            : data.attributes.buyatflipkart,
-      },
-      image:
-        data.attributes.image.data === null
-          ? null
-          : data.attributes.image.data.map((img: Imagedata) => {
-              return {
-                id: img.id,
-                url: img.attributes.url,
-                alt: img.attributes.alternativeText,
-              };
-            }),
-    };
-  });
-
+  const { data, meta } = response;
+  const allData = Phone.toNormalFormatArray(data);
   return {
     props: {
       data: allData,

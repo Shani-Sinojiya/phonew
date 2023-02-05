@@ -1,9 +1,19 @@
-import FilterContext from "@/context/Filter.context";
 import FilterContextProvider from "@/context/Filter.context.provider";
+import {
+  removeFilterCamera,
+  removeFilterProcessor,
+  removeFilterRam,
+  removeFilterRom,
+  setFilterCamera,
+  setFilterProcessor,
+  setFilterRam,
+  setFilterRom,
+} from "@/redux/filter/functions";
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -238,68 +248,40 @@ const Header = () => {
       },
     ];
 
-    const { setSubmit } = useContext(FilterContext);
-
     const FilterFeatureList = (props: { d: string; title: string }) => {
       const { d } = props;
       const [Selected, setSelected] = useState<boolean>();
-      const {
-        RAM,
-        setRAM,
-        ROM,
-        setROM,
-        Battery,
-        setBattery,
-        Camera,
-        setCamera,
-        Network,
-        setNetwork,
-        Processor,
-        setProcessor,
-      } = useContext(FilterContext);
+
+      const dispatch = useDispatch();
 
       useEffect(() => {
         switch (props.title) {
           case "RAM":
             if (Selected) {
-              setRAM([...RAM, d]);
+              dispatch(setFilterRam(d));
             } else {
-              setRAM(RAM.filter((item) => item !== d));
+              dispatch(removeFilterRam(d));
             }
             break;
           case "ROM":
             if (Selected) {
-              setROM([...ROM, d]);
+              dispatch(setFilterRom(d));
             } else {
-              setROM(ROM.filter((item) => item !== d));
-            }
-            break;
-          case "Battery":
-            if (Selected) {
-              setBattery([...Battery, d]);
-            } else {
-              setBattery(Battery.filter((item) => item !== d));
+              dispatch(removeFilterRom(d));
             }
             break;
           case "Camera":
             if (Selected) {
-              setCamera([...Camera, d]);
+              dispatch(setFilterCamera(d));
             } else {
-              setCamera(Camera.filter((item) => item !== d));
-            }
-            break;
-          case "Network":
-            if (Selected) {
-              setNetwork([...Network, d]);
-            } else {
-              setNetwork(Network.filter((item) => item !== d));
+              dispatch(removeFilterCamera(d));
             }
             break;
           case "Processor":
             if (Selected) {
-              setProcessor([...Processor, d]);
+              dispatch(setFilterProcessor(d));
             } else {
-              setProcessor(Processor.filter((item) => item !== d));
+              dispatch(removeFilterProcessor(d));
             }
             break;
           default:
@@ -385,7 +367,6 @@ const Header = () => {
             </li>
           </ul>
         </div>
-
         {(showBrand || showPricing || showFeatures) && (
           <div
             className={classNames(
@@ -430,36 +411,34 @@ const Header = () => {
             )}
             {/* Features */}
             {showFeatures && (
-              <>
-                <ul>
-                  {Features.map((Feature, index) => {
-                    return (
-                      <li className="grid grid-cols-5 mb-4" key={index}>
-                        <h3 className="text-md col-span-1">{Feature.title}:</h3>
-                        <ul className="col-span-4 flex gap-x-2">
-                          {Feature.data.map((d, index) => {
-                            return (
-                              <FilterFeatureList
-                                key={index}
-                                d={d}
-                                title={Feature.title}
-                              />
-                            );
-                          })}
-                        </ul>
-                      </li>
-                    );
-                  })}
-                  <li className="w-full flex justify-center items-center text-center mt-4">
-                    <button
-                      className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
-                      onClick={() => setSubmit(true)}
-                    >
-                      Search
-                    </button>
-                  </li>
-                </ul>
-              </>
+              <ul>
+                {Features.map((Feature, index) => {
+                  return (
+                    <li className="grid grid-cols-5 mb-4" key={index}>
+                      <h3 className="text-md col-span-1">{Feature.title}:</h3>
+                      <ul className="col-span-4 flex gap-x-2">
+                        {Feature.data.map((d, index) => {
+                          return (
+                            <FilterFeatureList
+                              key={index}
+                              d={d}
+                              title={Feature.title}
+                            />
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  );
+                })}
+                <li className="w-full flex justify-center items-center text-center mt-4">
+                  <button
+                    className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
+                    onClick={() => {}}
+                  >
+                    Search
+                  </button>
+                </li>
+              </ul>
             )}
           </div>
         )}

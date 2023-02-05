@@ -1,4 +1,5 @@
 import CardDetail from "@/components/Card/Detail";
+import { phone } from "@/data";
 import { HeaderFooterLayout } from "@/layouts";
 import { Carousel, Tabs } from "flowbite-react";
 import { GetServerSideProps } from "next";
@@ -62,6 +63,8 @@ type data = {
 type Props = {
   data: data;
 };
+
+const PhoneClass = new phone();
 
 const Phone = (props: Props) => {
   const { data } = props;
@@ -459,83 +462,18 @@ const Phone = (props: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const res = await fetch(
-    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=image",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + process.env.API_TOKEN,
-      },
-    }
+  const res = await PhoneClass.getPhone(
+    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=image"
   );
-
-  if (res.status === 404) {
+  if (res.error) {
     return {
       notFound: true,
     };
   }
-
-  const { data } = await res.json();
-
-  const allData = {
-    id: data.id,
-    name: data.attributes.name,
-    price: data.attributes.price,
-    brand: data.attributes.brand,
-    display: {
-      size: data.attributes.Displaysize,
-      resolution: data.attributes.DisplayResolution,
-      type: data.attributes.Displaytype,
-      PPI: data.attributes.DisplayPPI,
-      fps: data.attributes.DisplayRefreshRate,
-    },
-    hardware: {
-      processor: data.attributes.hardwareprocessor,
-      processorName: data.attributes.hardwareprocessorname,
-      RAM: data.attributes.hardwareRAM,
-      ROM: data.attributes.hardwareROM,
-    },
-    camera: {
-      rear: data.attributes.camerarear,
-      front: data.attributes.camerafront,
-      number: data.attributes.camerano,
-    },
-    general: {
-      os: data.attributes.OS,
-      battery: data.attributes.battery,
-      weight: data.attributes.weight,
-      IPrating: data.attributes.IPrating,
-      colours: data.attributes.colours,
-      fastcharging: data.attributes.fastcharging,
-      security: data.attributes.security,
-      release: data.attributes.release,
-    },
-    buyAt: {
-      amazon: data.attributes.buyatamazon,
-      flipkart: data.attributes.buyatflipkart,
-    },
-    image:
-      data.attributes.image.data === null
-        ? ([] as { id: number; url: string }[])
-        : data.attributes.image.data.map(
-            (img: {
-              id: number;
-              attributes: {
-                url: string;
-              };
-            }) => {
-              return {
-                id: img.id,
-                url: img.attributes.url,
-              };
-            }
-          ),
-  };
-
+  const { data } = res;
   return {
     props: {
-      data: allData,
+      data,
     },
   };
 };
