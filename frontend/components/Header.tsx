@@ -1,5 +1,5 @@
-import FilterContextProvider from "@/context/Filter.context.provider";
 import {
+  Clear,
   removeFilterCamera,
   removeFilterProcessor,
   removeFilterRam,
@@ -13,7 +13,7 @@ import {
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function classNames(...classes: string[]) {
@@ -254,6 +254,52 @@ const Header = () => {
       const [Selected, setSelected] = useState<boolean>();
 
       const dispatch = useDispatch();
+      const { ramFilter, romFilter, processorFilter, cameraFilter } =
+        useSelector(
+          (state: {
+            filter: {
+              ramFilter: string[];
+              romFilter: string[];
+              processorFilter: string[];
+              cameraFilter: string[];
+            };
+          }) => state.filter
+        );
+
+      useEffect(() => {
+        switch (props.title) {
+          case "RAM":
+            if (ramFilter.includes(d)) {
+              setSelected(true);
+            } else {
+              setSelected(false);
+            }
+            break;
+          case "ROM":
+            if (romFilter.includes(d)) {
+              setSelected(true);
+            } else {
+              setSelected(false);
+            }
+            break;
+          case "Camera":
+            if (cameraFilter.includes(d)) {
+              setSelected(true);
+            } else {
+              setSelected(false);
+            }
+            break;
+          case "Processor":
+            if (processorFilter.includes(d)) {
+              setSelected(true);
+            } else {
+              setSelected(false);
+            }
+            break;
+          default:
+            break;
+        }
+      }, []);
 
       useEffect(() => {
         switch (props.title) {
@@ -384,9 +430,7 @@ const Header = () => {
                 {Brand.map((item, index) => {
                   return (
                     <li className="hover:underline" key={index}>
-                      <Link href={"/search?q=" + item.toLowerCase()}>
-                        {item}
-                      </Link>
+                      <Link href={"/brand/" + item.toLowerCase()}>{item}</Link>
                     </li>
                   );
                 })}
@@ -399,13 +443,17 @@ const Header = () => {
                   if (p.above) {
                     return (
                       <li className="hover:underline" key={index}>
-                        Above ₹{p.start}
+                        <Link href={"/price/" + p.start + "/above"}>
+                          Above ₹{p.start}
+                        </Link>
                       </li>
                     );
                   }
                   return (
                     <li className="hover:underline" key={index}>
-                      ₹{p.start} - ₹{p?.stop}
+                      <Link href={"/price/" + p.start + "/" + p.stop}>
+                        ₹{p.start} - ₹{p?.stop}
+                      </Link>
                     </li>
                   );
                 })}
@@ -432,7 +480,7 @@ const Header = () => {
                     </li>
                   );
                 })}
-                <li className="w-full flex justify-center items-center text-center mt-4">
+                <li className="w-full flex justify-center items-center text-center mt-4 gap-x-4">
                   <button
                     className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
                     onClick={() => {
@@ -441,6 +489,15 @@ const Header = () => {
                     }}
                   >
                     Search
+                  </button>
+                  <button
+                    className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
+                    onClick={() => {
+                      dispatch(Clear());
+                      setShowFeatures(false);
+                    }}
+                  >
+                    Clear
                   </button>
                 </li>
               </ul>

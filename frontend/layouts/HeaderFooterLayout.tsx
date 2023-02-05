@@ -1,6 +1,6 @@
 import { Footer, Header } from "@/components";
-import FilterContextProvider from "@/context/Filter.context.provider";
 import Head from "next/head";
+import { Fragment } from "react";
 
 type props = {
   children?: React.ReactNode;
@@ -9,7 +9,7 @@ type props = {
 
 const HeaderFooterLayout = (props: props) => {
   return (
-    <FilterContextProvider>
+    <Fragment>
       <Head>
         <title>
           {props.pageTitle ? props.pageTitle + " | Phonew" : "Phonew"}
@@ -18,7 +18,7 @@ const HeaderFooterLayout = (props: props) => {
       <Header />
       {props.children}
       <Footer />
-    </FilterContextProvider>
+    </Fragment>
   );
 };
 

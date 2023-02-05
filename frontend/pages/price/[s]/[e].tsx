@@ -73,7 +73,7 @@ const Search = () => {
 
   if (Pagination.pageCount === 0) {
     return (
-      <HeaderFooterLayout pageTitle={Router.query.q + " - Search "}>
+      <HeaderFooterLayout pageTitle={Router.query.q + " - Price "}>
         <div className="flex justify-center items-center h-screen">
           <h1 className="text-2xl font-bold">No Results Found</h1>
         </div>
@@ -112,7 +112,7 @@ const Search = () => {
   };
 
   return (
-    <HeaderFooterLayout pageTitle={Router.query.q + " - Search"}>
+    <HeaderFooterLayout pageTitle={Router.query.q + " - Price"}>
       <h2 className="w-full bg-[#F8F8F8] pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
         <span className="col-span-2"></span>
         <span className="col-span-10">

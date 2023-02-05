@@ -1,4 +1,5 @@
 import {
+  CLEAR,
   REMOVE_FILTER_CAMERA,
   REMOVE_FILTER_PROCESSOR,
   REMOVE_FILTER_RAM,
@@ -97,10 +98,18 @@ const filter = (state = initialState, action: FilterAction) => {
           "&filters[hardwareprocessorname][$containsi]=" + pf.toString()
         );
       });
-
       const newUrl = url.join("");
-
       return { ...state, url: newUrl };
+
+    case CLEAR:
+      return {
+        ...state,
+        ramFilter: [],
+        romFilter: [],
+        cameraFilter: [],
+        processorFilter: [],
+        url: [],
+      };
 
     default:
       return state;

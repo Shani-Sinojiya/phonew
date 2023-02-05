@@ -44,7 +44,7 @@ const Search = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=image&filters[brand][$containsi]=${Router.query.q}` +
           filterUrl;
         const res = await Phone.getPhones(url);
         const { data, meta } = res;
@@ -60,7 +60,7 @@ const Search = () => {
     const DisplayNew = async () => {
       const url =
         process.env.API_URL +
-        `/phones?populate=image&filters[name][$containsi]=${Router.query.q}`;
+        `/phones?populate=image&filters[brand][$containsi]=${Router.query.q}`;
       const res = await Phone.getPhones(url);
       const { data, meta } = res;
       const allData = Phone.toNormalFormatArray(data);
@@ -73,7 +73,7 @@ const Search = () => {
 
   if (Pagination.pageCount === 0) {
     return (
-      <HeaderFooterLayout pageTitle={Router.query.q + " - Search "}>
+      <HeaderFooterLayout pageTitle={Router.query.q + " - Brand "}>
         <div className="flex justify-center items-center h-screen">
           <h1 className="text-2xl font-bold">No Results Found</h1>
         </div>
@@ -88,7 +88,7 @@ const Search = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=image&filters[brand][$containsi]=${Router.query.q}` +
           filterUrl +
           `&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
@@ -99,7 +99,7 @@ const Search = () => {
       } else {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${
+          `/phones?populate=image&filters[brand][$containsi]=${
             Router.query.q
           }&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
@@ -112,11 +112,11 @@ const Search = () => {
   };
 
   return (
-    <HeaderFooterLayout pageTitle={Router.query.q + " - Search"}>
+    <HeaderFooterLayout pageTitle={Router.query.b + " | Brand "}>
       <h2 className="w-full bg-[#F8F8F8] pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
         <span className="col-span-2"></span>
         <span className="col-span-10">
-          Search: <span className="text-filter">{Router.query.q}</span>
+          Search: <span className="text-filter">{Router.query.b}</span>
         </span>
       </h2>
       <InfiniteScroll

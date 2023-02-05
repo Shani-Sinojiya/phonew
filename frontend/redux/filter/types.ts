@@ -12,6 +12,7 @@ export const REMOVE_FILTER_CAMERA = "REMOVE_FILTER_CAMERA";
 
 // submit
 export const SUMBIT = "SUBMIT";
+export const CLEAR = "CLEAR";
 
 export type FilterAction = {
   type:
@@ -23,6 +24,7 @@ export type FilterAction = {
     | typeof REMOVE_FILTER_ROM
     | typeof REMOVE_FILTER_PROCESSOR
     | typeof REMOVE_FILTER_CAMERA
-    | typeof SUMBIT;
+    | typeof SUMBIT
+    | typeof CLEAR;
   payload: string;
 };
