@@ -7,6 +7,7 @@ import {
   SET_FILTER_PROCESSOR,
   SET_FILTER_RAM,
   SET_FILTER_ROM,
+  SUMBIT,
 } from "./types";
 
 export const setFilterRam = (ram: string) => {
@@ -62,6 +63,12 @@ export const removeFilterCamera = (camera: string) => {
   return {
     type: REMOVE_FILTER_CAMERA,
     payload: camera,
+  };
+};
+
+export const Submit = () => {
+  return {
+    type: SUMBIT,
   };
 };
 

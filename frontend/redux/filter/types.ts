@@ -10,6 +10,9 @@ export const REMOVE_FILTER_ROM = "REMOVE_FILTER_ROM";
 export const REMOVE_FILTER_PROCESSOR = "REMOVE_FILTER_PROCESSOR";
 export const REMOVE_FILTER_CAMERA = "REMOVE_FILTER_CAMERA";
 
+// submit
+export const SUMBIT = "SUBMIT";
+
 export type FilterAction = {
   type:
     | typeof SET_FILTER_RAM
@@ -19,6 +22,7 @@ export type FilterAction = {
     | typeof REMOVE_FILTER_RAM
     | typeof REMOVE_FILTER_ROM
     | typeof REMOVE_FILTER_PROCESSOR
-    | typeof REMOVE_FILTER_CAMERA;
+    | typeof REMOVE_FILTER_CAMERA
+    | typeof SUMBIT;
   payload: string;
 };

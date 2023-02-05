@@ -4,8 +4,9 @@ import { HeaderFooterLayout } from "@/layouts";
 import type { data, pagination, props } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector } from "react-redux";
 
 const Phone = new phone();
 
@@ -14,20 +15,64 @@ const Home = (props: props) => {
     const [Data, setData] = useState<data[]>(props.data);
     const [Pagination, setPagination] = useState<pagination>(props.pagination);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [filterUrl, setFilterUrl] = useState<string>("");
+
+    const { url } = useSelector(
+      (state: {
+        filter: {
+          ramFilter: string[];
+          romFilter: string[];
+          processorFilter: string[];
+          cameraFilter: string[];
+          url: string;
+        };
+      }) => state.filter
+    );
+
+    useEffect(() => {
+      setFilterUrl(url);
+    }, [url]);
+
+    useEffect(() => {
+      const NewFilterFetch = async () => {
+        if (filterUrl !== "") {
+          const url =
+            process.env.API_URL + `/phones?populate=image${filterUrl}`;
+          const res = await Phone.getPhones(url);
+          const { data, meta } = res;
+          const allData = Phone.toNormalFormatArray(data);
+          setData([...allData] as unknown as data[]);
+          setPagination(meta.pagination);
+        }
+      };
+      NewFilterFetch();
+    }, [filterUrl]);
 
     const fetchData = async () => {
       if (Pagination.page === Pagination.pageCount) {
         setHasMore(false);
       } else {
-        const url =
-          process.env.API_URL +
-          `/phones?populate=image` +
-          `&pagination[page]=${Pagination.page + 1}`;
-        const res = await Phone.getPhones(url);
-        const { data, meta } = res;
-        const allData = Phone.toNormalFormatArray(data);
-        setData([...Data, ...allData] as data[]);
-        setPagination(meta.pagination);
+        if (filterUrl !== "") {
+          const url =
+            process.env.API_URL +
+            `/phones?populate=image${filterUrl}` +
+            `&pagination[page]=${Pagination.page + 1}`;
+          const res = await Phone.getPhones(url);
+          const { data, meta } = res;
+          const allData = Phone.toNormalFormatArray(data);
+          setData([...Data, ...allData] as data[]);
+          setPagination(meta.pagination);
+        } else {
+          const url =
+            process.env.API_URL +
+            `/phones?populate=image` +
+            `&pagination[page]=${Pagination.page + 1}`;
+          const res = await Phone.getPhones(url);
+          const { data, meta } = res;
+          const allData = Phone.toNormalFormatArray(data);
+          setData([...Data, ...allData] as data[]);
+          setPagination(meta.pagination);
+        }
       }
     };
 

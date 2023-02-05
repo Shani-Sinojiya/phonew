@@ -7,6 +7,7 @@ import {
   SET_FILTER_PROCESSOR,
   SET_FILTER_RAM,
   SET_FILTER_ROM,
+  SUMBIT,
 } from "./types";
 import type { FilterAction } from "./types";
 
@@ -15,6 +16,7 @@ interface FilterState {
   romFilter: string[];
   processorFilter: string[];
   cameraFilter: string[];
+  url: string;
 }
 
 const initialState: FilterState = {
@@ -22,6 +24,7 @@ const initialState: FilterState = {
   romFilter: [],
   processorFilter: [],
   cameraFilter: [],
+  url: "",
 };
 
 const filter = (state = initialState, action: FilterAction) => {
@@ -73,6 +76,31 @@ const filter = (state = initialState, action: FilterAction) => {
         (item) => item !== action.payload
       );
       return { ...state, cameraFilter: removeCameraFilter };
+
+    case SUMBIT:
+      const url: string[] = [];
+
+      state.ramFilter.map((ram) => {
+        url.push("&filters[hardwareRAM][$containsi]=" + ram.toString());
+      });
+
+      state.romFilter.map((rom) => {
+        url.push("&filters[hardwareROM][$containsi]=" + rom.toString());
+      });
+
+      state.cameraFilter.map((cam) => {
+        url.push("&filters[camerafront][$containsi]=" + cam.toString());
+      });
+
+      state.processorFilter.map((pf) => {
+        url.push(
+          "&filters[hardwareprocessorname][$containsi]=" + pf.toString()
+        );
+      });
+
+      const newUrl = url.join("");
+
+      return { ...state, url: newUrl };
 
     default:
       return state;

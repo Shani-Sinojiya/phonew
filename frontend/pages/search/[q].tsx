@@ -1,28 +1,79 @@
 import { HeaderFooterLayout } from "@/layouts";
-import {
-  props,
-  data,
-  pagination,
-} from "@/types/Phones.type";
+import { data, pagination } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
+import { useSelector } from "react-redux";
 
 const Phone = new phone();
 
-const Search = (props: props) => {
-  const [Data, setData] = useState<data[]>(props.data);
-  const [Pagination, setPagination] = useState<pagination>(props.pagination);
+const Search = () => {
+  const [Data, setData] = useState<data[]>([]);
+  const [Pagination, setPagination] = useState<pagination>({
+    page: 0,
+    pageCount: 999999999999999999999,
+    total: 2222222222222222222222222222,
+    pageSize: 54515,
+  });
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [filterUrl, setFilterUrl] = useState<string>("");
+
   const Router = useRouter();
+
+  const { url } = useSelector(
+    (state: {
+      filter: {
+        ramFilter: string[];
+        romFilter: string[];
+        processorFilter: string[];
+        cameraFilter: string[];
+        url: string;
+      };
+    }) => state.filter
+  );
+
+  useEffect(() => {
+    setFilterUrl(url);
+  }, [url]);
+
+  useEffect(() => {
+    const NewFilterFetch = async () => {
+      if (filterUrl !== "") {
+        const url =
+          process.env.API_URL +
+          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          filterUrl;
+        const res = await Phone.getPhones(url);
+        const { data, meta } = res;
+        const allData = Phone.toNormalFormatArray(data);
+        setData([...allData] as unknown as data[]);
+        setPagination(meta.pagination);
+      }
+    };
+    NewFilterFetch();
+  }, [filterUrl]);
+
+  useEffect(() => {
+    const DisplayNew = async () => {
+      const url =
+        process.env.API_URL +
+        `/phones?populate=image&filters[name][$containsi]=${Router.query.q}`;
+      const res = await Phone.getPhones(url);
+      const { data, meta } = res;
+      const allData = Phone.toNormalFormatArray(data);
+      setData([...Data, ...allData] as data[]);
+      setPagination(meta.pagination);
+    };
+
+    DisplayNew();
+  }, [Router.query.q]);
 
   if (Pagination.pageCount === 0) {
     return (
-      <HeaderFooterLayout>
+      <HeaderFooterLayout pageTitle={Router.query.q + " | Search "}>
         <div className="flex justify-center items-center h-screen">
           <h1 className="text-2xl font-bold">No Results Found</h1>
         </div>
@@ -33,23 +84,31 @@ const Search = (props: props) => {
   const fetchData = async () => {
     if (Pagination.page === Pagination.pageCount) {
       setHasMore(false);
+    } else {
+      if (filterUrl !== "") {
+        const url =
+          process.env.API_URL +
+          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          filterUrl +
+          `&pagination[page]=${Pagination.page + 1}`;
+        const res = await Phone.getPhones(url);
+        const { data, meta } = res;
+        const allData = Phone.toNormalFormatArray(data);
+        setData([...Data, ...allData] as data[]);
+        setPagination(meta.pagination);
+      } else {
+        const url =
+          process.env.API_URL +
+          `/phones?populate=image&filters[name][$containsi]=${
+            Router.query.q
+          }&pagination[page]=${Pagination.page + 1}`;
+        const res = await Phone.getPhones(url);
+        const { data, meta } = res;
+        const allData = Phone.toNormalFormatArray(data);
+        setData([...Data, ...allData] as data[]);
+        setPagination(meta.pagination);
+      }
     }
-
-    const response = await Phone.getPhones(
-      process.env.API_URL +
-        `/phones&filters[name][$containsi]=${Router.query.q}&pagination[page]=${
-          Pagination.page + 1
-        }`
-    );
-
-    const { data, meta } = response;
-
-    const allData = Phone.toNormalFormatArray(data);
-
-    const newData = [...Data, ...allData];
-    setData(newData as data[]);
-
-    setPagination(meta.pagination);
   };
 
   return (
@@ -82,30 +141,6 @@ const Search = (props: props) => {
       </InfiniteScroll>
     </HeaderFooterLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (ctx.query.q == undefined) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  const response = await Phone.getPhones(
-    process.env.API_URL +
-      "/phones?populate=image&filters[name][$contains]=" +
-      ctx.query.q
-  );
-  const { data, meta } = response;
-  const allData = Phone.toNormalFormatArray(data);
-  return {
-    props: {
-      data: allData,
-      pagination: meta.pagination,
-    },
-  };
 };
 
 export default Search;

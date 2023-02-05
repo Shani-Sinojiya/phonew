@@ -8,6 +8,7 @@ import {
   setFilterProcessor,
   setFilterRam,
   setFilterRom,
+  Submit,
 } from "@/redux/filter/functions";
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
@@ -305,6 +306,7 @@ const Header = () => {
     };
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     return (
       <div className="relative transition-all">
@@ -433,7 +435,10 @@ const Header = () => {
                 <li className="w-full flex justify-center items-center text-center mt-4">
                   <button
                     className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
-                    onClick={() => {}}
+                    onClick={() => {
+                      dispatch(Submit());
+                      setShowFeatures(false);
+                    }}
                   >
                     Search
                   </button>
