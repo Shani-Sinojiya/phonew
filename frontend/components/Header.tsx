@@ -13,7 +13,7 @@ import {
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function classNames(...classes: string[]) {
@@ -251,7 +251,7 @@ const Header = () => {
 
     const FilterFeatureList = (props: { d: string; title: string }) => {
       const { d } = props;
-      const [Selected, setSelected] = useState<boolean>();
+      const [Selected, setSelected] = useState<boolean>(false);
 
       const dispatch = useDispatch();
       const { ramFilter, romFilter, processorFilter, cameraFilter } =
@@ -418,7 +418,7 @@ const Header = () => {
         {(showBrand || showPricing || showFeatures) && (
           <div
             className={classNames(
-              "absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-50",
+              "absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-[500]",
               showFeatures
                 ? "md:left-1/2 md:-translate-x-1/2 max-sm:w-full max-sm:border-b max-sm:border-x-0 max-sm:rounded-none"
                 : "left-1/2 -translate-x-1/2"
@@ -443,7 +443,7 @@ const Header = () => {
                   if (p.above) {
                     return (
                       <li className="hover:underline" key={index}>
-                        <Link href={"/price/" + p.start + "/above"}>
+                        <Link href={"/price?s=" + p.start + "&e=above"}>
                           Above ₹{p.start}
                         </Link>
                       </li>
@@ -451,7 +451,7 @@ const Header = () => {
                   }
                   return (
                     <li className="hover:underline" key={index}>
-                      <Link href={"/price/" + p.start + "/" + p.stop}>
+                      <Link href={"/price?s=" + p.start + "&e=" + p.stop}>
                         ₹{p.start} - ₹{p?.stop}
                       </Link>
                     </li>
@@ -509,10 +509,10 @@ const Header = () => {
   };
 
   return (
-    <Fragment>
+    <StrictMode>
       <NavBarForHeader />
       <FilterSection />
-    </Fragment>
+    </StrictMode>
   );
 };
 
