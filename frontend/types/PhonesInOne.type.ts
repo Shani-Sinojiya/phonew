@@ -13,8 +13,8 @@ type display = {
 type hardware = {
   processor: string;
   processorName: string;
-  RAM: string;
-  ROM: string;
+  RAM: string[];
+  ROM: string[];
 };
 
 type camera = {
@@ -40,11 +40,12 @@ type buyAt = {
 };
 
 type data = {
+  network: string;
   id: number;
   name: string;
   image: image[];
   price: number;
-  brand: string;
+  brand: number;
   display: display;
   hardware: hardware;
   camera: camera;

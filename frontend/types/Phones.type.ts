@@ -43,7 +43,17 @@ type image = {
 type attributes = {
   image: image;
   name: string;
-  brand: string;
+  network: string;
+  brand: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
+  };
   release: string;
   weight: number;
   IPrating: string;

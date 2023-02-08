@@ -1,7 +1,7 @@
 type Phone = {
   image: number[];
   name: string;
-  brand: string;
+  brand: number;
   release: string;
   weight: number;
   IPrating: string;
@@ -23,8 +23,9 @@ type Phone = {
   price: number;
   buyatamazon: string;
   buyatflipkart: string;
-  hardwareRAM: string;
-  hardwareROM: string;
+  network: string;
+  RAM: string[];
+  ROM: string[];
 };
 
 export type { Phone };

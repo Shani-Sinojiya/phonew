@@ -38,7 +38,7 @@ const LatestPhones = (props: props) => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image&sort[0]=release:desc${filterUrl}`;
+            `/phones?populate=image,brand&sort[0]=release:desc${filterUrl}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
           const allData = Phone.toNormalFormatArray(data);
@@ -56,7 +56,7 @@ const LatestPhones = (props: props) => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image&sort[0]=release:desc${filterUrl}` +
+            `/phones?populate=image,brand&sort[0]=release:desc${filterUrl}` +
             `&pagination[page]=${Pagination.page + 1}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
@@ -66,7 +66,7 @@ const LatestPhones = (props: props) => {
         } else {
           const response = await Phone.getPhones(
             process.env.API_URL +
-              `/phones?sort[0]=release:desc&populate=image&pagination[page]=${
+              `/phones?sort[0]=release:desc&populate=image,brand&pagination[page]=${
                 Pagination.page + 1
               }`
           );
@@ -90,11 +90,6 @@ const LatestPhones = (props: props) => {
           </div>
         }
         className="min-h-screen grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
-        endMessage={
-          <p className="text-center text-[#8E8E8E] font-normal">
-            <b>You have seen it all</b>
-          </p>
-        }
       >
         {Data.map((data) => (
           <Card key={data.id} {...data} />
@@ -112,7 +107,7 @@ const LatestPhones = (props: props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const response = await Phone.getPhones(
-    process.env.API_URL + "/phones?populate=image&sort[0]=release:desc"
+    process.env.API_URL + "/phones?populate=image,brand&sort[0]=release:desc"
   );
   const { data, meta } = await response;
   const allData = Phone.toNormalFormatArray(data);

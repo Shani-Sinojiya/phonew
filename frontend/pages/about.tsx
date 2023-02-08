@@ -9,7 +9,8 @@ const About = () => {
           <div className="grid md:grid-cols-6 mt-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16">
             <div className="md:col-span-3 relative">
               <h2 className="font-PhosphateProSolid text-4xl md:max-w-[24rem] w-full max-md:text-2xl text-primary-0">
-                We are PHONEW. <br /> one-stop destination for your new phone
+                We are PHONEW. <br className="max-md:hidden" /> one-stop
+                destination for your new phone
               </h2>
               <p className="font-outfit max-w-[20rem] text-primary-3 font-normal mt-8 text-lg">
                 Thinking of buying of new phone! we have larger collection of
@@ -24,7 +25,7 @@ const About = () => {
                 Buy Now
               </button>
               <svg
-                className="absolute md:bottom-12 max-md:bottom-4 md:h-28 max-md:h-24 left-[8.75rem] fill-none"
+                className="absolute md:bottom-[3.25rem] max-md:bottom-4 md:h-[6.5rem] max-md:h-24 left-[8.75rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -35,16 +36,21 @@ const About = () => {
               </svg>
             </div>
             <div className="col-span-3 max-md:hidden flex justify-center items-center">
-              <img src="/ab1.svg" alt="s" className="w-64 float-right" />
+              <img
+                src="/ab1.svg"
+                alt="s"
+                className="w-64 float-right"
+                draggable={false}
+              />
             </div>
           </div>
         </div>
         <div className="px-4 py-2 bg-[#FFEDED] border rounded-xl border-[#FF6868]">
           <div className="grid md:grid-cols-6 my-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16">
             <div className="md:col-span-3 relative">
-              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[24rem] w-full max-md:text-2xl text-[#FF6767]">
-                All your favourite <br /> brands at just place and one click
-                away to buy
+              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[27rem] w-full max-md:text-2xl text-[#FF6767]">
+                All your favourite brands at just place and one click away to
+                buy
               </h2>
               <p className="font-outfit max-w-[20rem] text-[#FF6767] font-normal mt-8 text-lg">
                 Select and buy phone from your favourite phone brand from the
@@ -59,7 +65,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-28 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -70,15 +76,20 @@ const About = () => {
               </svg>
             </div>
             <div className="col-span-3 max-md:hidden flex justify-center items-center">
-              <img src="/ab2.svg" alt="s" className="w-80 float-right" />
+              <img
+                src="/ab2.svg"
+                alt="s"
+                className="w-80 float-right"
+                draggable={false}
+              />
             </div>
           </div>
         </div>
         <div className="px-4 py-2 bg-[#FDE8FF] border rounded-xl border-[#E75FF3]">
           <div className="grid md:grid-cols-6 my-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16">
             <div className="md:col-span-3 relative">
-              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[24rem] w-full max-md:text-2xl text-[#E456F0]">
-                We have all pricing <br /> range to fit best for your next phone
+              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[26rem] w-full max-md:text-2xl text-[#E456F0]">
+                We have all pricing range to fit best for your next phone
               </h2>
               <p className="font-outfit max-w-[20rem] text-[#E456F0] font-normal mt-8 text-lg">
                 From all the different pricing range you can choose the best fit
@@ -93,7 +104,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-28 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -104,30 +115,36 @@ const About = () => {
               </svg>
             </div>
             <div className="col-span-3 max-md:hidden flex justify-center items-center">
-              <img src="/ab3.svg" alt="s" className="w-96 float-right" />
+              <img
+                src="/ab3.svg"
+                alt="s"
+                className="w-96 float-right"
+                draggable={false}
+              />
             </div>
           </div>
         </div>
         <div className="px-4 py-2 bg-[#EBFFE8] border rounded-xl border-[#51E538]">
           <div className="grid md:grid-cols-6 mt-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16">
             <div className="md:col-span-3 relative">
-              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[24rem] w-full max-md:text-2xl text-[#6EC160]">
-                We are PHONEW. <br /> one-stop destination for your new phone
+              <h2 className="font-PhosphateProSolid text-4xl md:max-w-[26rem] w-full max-md:text-2xl text-[#6EC160]">
+                We have list of features that you can choose which best fit for
+                you
               </h2>
               <p className="font-outfit max-w-[20rem] text-[#6EC160] font-normal mt-8 text-lg">
-                Thinking of buying of new phone! we have larger collection of
-                phones that you easily choose and buy from.
+                From the list of all the features of phone that you can choose
+                from which will most needed feature for you.
               </p>
               <button
-                className="border-[#6EC160] border-2 transition-colors ease-in-out bg-white hover:bg-[#6EC160] hover:text-white text-[#6EC160] font-outfit font-semibold text-lg px-8 py-2 rounded-full mt-10"
+                className="border-[#6EC160] border-2 transition-colors ease-in-out bg-white hover:bg-[#6EC160] hover:text-white text-[#6EC160] font-outfit font-semibold text-lg px-8 py-2 rounded-full mt-10 md:mb-10"
                 onClick={() => {
                   Router.push("/");
                 }}
               >
-               Explore now
+                Explore now
               </button>
               <svg
-                className="absolute md:bottom-14 max-md:bottom-4 md:h-28 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-14 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -138,7 +155,12 @@ const About = () => {
               </svg>
             </div>
             <div className="col-span-3 max-md:hidden flex justify-center items-center">
-              <img src="/AB4.svg" alt="s" className="w-96 float-right" />
+              <img
+                src="/AB4.svg"
+                alt="s"
+                className="w-96 float-right -mb-8"
+                draggable={false}
+              />
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import { data } from "@/types/Phones.type";
 import { Carousel } from "flowbite-react";
-import Image from "next/image";
 import Link from "next/link";
 import CardDetail from "./Detail";
 
@@ -28,22 +27,24 @@ const Card = (props: data) => {
               {props.brand + " " + props.name}
             </h2>
             <div className="max-md:absolute max-md:right-0 max-md:top-1">
-              <span className="max-md:block hidden float-right rounded-full cursor-pointer text-primary-1">
-                <svg
-                  className="w-5 h-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                  />
-                </svg>
-              </span>
+              <Link href={"/phone/" + props.id}>
+                <span className="max-md:block hidden float-right rounded-full cursor-pointer text-primary-1">
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </span>
+              </Link>
               <Link
                 href={"/phone/" + props.id}
                 className="md:block hidden float-right px-4 py-2 rounded-full cursor-pointer bg-[#F0F0F0] text-primary-1"
@@ -90,7 +91,7 @@ const Card = (props: data) => {
                   Buy at
                 </h3>
                 <Link
-                  href={props.buyAt.flipkart}
+                  href={props.buyAt.amazon}
                   className="bg-black flex items-center justify-center py-3 px-4 rounded-xl"
                 >
                   <svg

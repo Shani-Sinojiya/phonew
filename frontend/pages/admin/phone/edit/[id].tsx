@@ -6,15 +6,24 @@ import { AdminLayout } from "@/layouts";
 import { AdminHeader } from "@/components";
 import ImageID from "@/context/ImageID.context";
 import ImageIDProvider from "@/context/ImageID.context.provider";
-import { Button, Label, TextInput } from "flowbite-react";
-import { useRef, useState, useContext, useEffect, ChangeEvent } from "react";
+import { Button, Label, Select, TextInput } from "flowbite-react";
+import {
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+  ChangeEvent,
+  Fragment,
+} from "react";
 import { toast } from "react-toastify";
 import PhoneProvider from "@/context/Phone.context.provider";
 import PhoneContext from "@/context/Phone.context";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import Router from "next/router";
+import { classNames } from "@/lib";
+import Head from "next/head";
+import { AdminBrand } from "@/data";
+import { BrandStateDataProps } from "@/types/Brand.types";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const PhonesInOne = (props: props) => {
   const PhoneFormUpdate = () => {
@@ -23,8 +32,8 @@ const PhonesInOne = (props: props) => {
       const [showDrop, setShowDrop] = useState<boolean>();
       const [file, setFile] = useState<any | null>(null);
       const [show, setShow] = useState<boolean>();
-
       const [upload, setFileUpload] = useState<any>();
+      const { ImageIdArray, setImageIdArray } = useContext(ImageID);
 
       const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -39,8 +48,6 @@ const PhonesInOne = (props: props) => {
           };
         }
       };
-
-      const { ImageIdArray, setImageIdArray } = useContext(ImageID);
 
       const HendleUpload = async () => {
         const toastupload = toast.loading("File Uploading");
@@ -177,7 +184,6 @@ const PhonesInOne = (props: props) => {
             const idArray = ImageIdArray;
             const removeElement = (array: number[], n: number) => {
               let newArray = [];
-
               for (let i = 0; i < array.length; i++) {
                 if (array[i] !== n) {
                   newArray.push(array[i]);
@@ -185,6 +191,19 @@ const PhonesInOne = (props: props) => {
               }
               return newArray;
             };
+            const res = await fetch(
+              process.env.API_URL + "/upload/files/" + props.id,
+              {
+                method: "DELETE",
+                headers: { Authorization: "Bearer " + process.env.API_TOKEN },
+              }
+            );
+            const data = await res.json();
+            if (data) {
+              toast.success("Image Removed");
+            } else {
+              toast.error("Image Remove Error");
+            }
             setImageIdArray(await removeElement(idArray, props.id));
           };
 
@@ -323,14 +342,54 @@ const PhonesInOne = (props: props) => {
         setFastCharing,
         Color,
         setColor,
-        Security,
-        setSecurity,
         Battery,
         setBattery,
         Price,
         setPrice,
       } = useContext(PhoneContext);
 
+      const [BrandNameArray, setBrandNameArray] =
+        useState<BrandStateDataProps[]>();
+      const [BrandNameArrayLoading, setBrandNameArrayLoading] = useState(true);
+
+      useEffect(() => {
+        const getBrandName = async () => {
+          const brand = new AdminBrand();
+          const { data } = await brand.getBrandsNameAndDate();
+          setBrandNameArray(data);
+          setBrandNameArrayLoading(false);
+        };
+        getBrandName();
+      }, []);
+
+      const Securitysection = () => {
+        const { Security, setSecurity } = useContext(PhoneContext);
+        const [securityArray, setSecurityArray] = useState<string[]>([
+          "Face Id",
+          "PIN Code",
+          "Fingerprint",
+          "Iris Scanning",
+        ]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"Security"} value={"Security"} />
+            </div>
+            <Select
+              value={Security}
+              onChange={(e) => setSecurity(e.target.value)}
+            >
+              <option>Add Security</option>
+              {securityArray.map((security) => (
+                <option value={security} key={security}>
+                  {security}
+                </option>
+              ))}
+            </Select>
+          </div>
+        );
+      };
       return (
         <div className="max-w-xl my-4">
           <div className="mb-2">
@@ -351,15 +410,22 @@ const PhonesInOne = (props: props) => {
             <div className="mb-2 block">
               <Label htmlFor={"BrandName"} value={"Brand Name"} />
             </div>
-            <TextInput
-              id="BrandName"
-              type={"text"}
+            <Select
+              id="countries"
+              required={true}
               value={BrandName}
-              placeholder={"Apple"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setBrandName(e.target.value)
-              }
-            />
+              onChange={(e) => setBrandName(Number(e.target.value))}
+            >
+              {BrandNameArrayLoading ? (
+                <option value={0}>Loading...</option>
+              ) : (
+                BrandNameArray?.map((brand) => (
+                  <option key={brand.id} value={brand.id}>
+                    {brand.name}
+                  </option>
+                ))
+              )}
+            </Select>
           </div>
           <div className="mb-2">
             <div className="mb-2 block">
@@ -369,6 +435,15 @@ const PhonesInOne = (props: props) => {
               id="Price"
               type={"number"}
               value={Price}
+              icon={() => (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  className="w-4 h-4"
+                >
+                  <path d="M0 64C0 46.3 14.3 32 32 32H96h16H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H231.8c9.6 14.4 16.7 30.6 20.7 48H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H252.4c-13.2 58.3-61.9 103.2-122.2 110.9L274.6 422c14.4 10.3 17.7 30.3 7.4 44.6s-30.3 17.7-44.6 7.4L13.4 314C2.1 306-2.7 291.5 1.5 278.2S18.1 256 32 256h80c32.8 0 61-19.7 73.3-48H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H185.3C173 115.7 144.8 96 112 96H96 32C14.3 96 0 81.7 0 64z" />
+                </svg>
+              )}
               placeholder={"12421455"}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setPrice(e.target.value)
@@ -459,20 +534,7 @@ const PhonesInOne = (props: props) => {
               }
             />
           </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"Security"} value={"Security"} />
-            </div>
-            <TextInput
-              id="Security"
-              type={"text"}
-              placeholder="Face ID"
-              value={Security}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSecurity(e.target.value)
-              }
-            />
-          </div>
+          <Securitysection />
           <div className="mb-2">
             <div className="mb-2 block">
               <Label htmlFor={"Battery"} value={"Battery"} />
@@ -492,35 +554,75 @@ const PhonesInOne = (props: props) => {
     };
 
     const DisplayForm = () => {
-      const {
-        Type,
-        setType,
-        Refreshrate,
-        setRefreshrate,
-        Size,
-        setSize,
-        Resolution,
-        setResolution,
-        FPS,
-        setFPS,
-      } = useContext(PhoneContext);
+      const { Refreshrate, setRefreshrate, Size, setSize, FPS, setFPS } =
+        useContext(PhoneContext);
+
+      const DisplayTypesection = () => {
+        const { Type, setType } = useContext(PhoneContext);
+        const [DisplayTypesArray, setDisplayTypesArray] = useState<string[]>([
+          "LCD",
+          "OLED",
+          "AMOLED",
+        ]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"Displaytype"} value={"Display type"} />
+            </div>
+            <Select value={Type} onChange={(e) => setType(e.target.value)}>
+              <option>Add Display Type</option>
+              {DisplayTypesArray.map((type) => (
+                <option value={type} key={type}>
+                  {type}
+                </option>
+              ))}
+            </Select>
+          </div>
+        );
+      };
+
+      const DisplayResolutionsection = () => {
+        const { Resolution, setResolution } = useContext(PhoneContext);
+        const [DisplayResolutionsArray, setDisplayResolutionsArray] = useState<
+          string[]
+        >([
+          "720x1280 Pixels",
+          "1024x768 Pixels",
+          "1366x768 Pixels",
+          "1080x2160 Pixels",
+          "1920x1080 Pixels",
+          "1440x2560 Pixels",
+          "3840x2160 Pixels",
+        ]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label
+                htmlFor={"DisplayResolution"}
+                value={"Display Resolution"}
+              />
+            </div>
+            <Select
+              id="DisplayResolution"
+              value={Resolution}
+              onChange={(e) => setResolution(e.target.value)}
+            >
+              <option>Add Resolution</option>
+              {DisplayResolutionsArray.map((Resolution) => (
+                <option value={Resolution} key={Resolution}>
+                  {Resolution}
+                </option>
+              ))}
+            </Select>
+          </div>
+        );
+      };
 
       return (
         <div className="max-w-xl my-4">
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"DisplayType"} value={"Display Type"} />
-            </div>
-            <TextInput
-              id="DisplayType"
-              type={"text"}
-              value={Type}
-              placeholder={"AMOLAD"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setType(e.target.value)
-              }
-            />
-          </div>
+          <DisplayTypesection />
           <div className="mb-2">
             <div className="mb-2 block">
               <Label htmlFor={"Refreshrate"} value={"Refresh rate"} />
@@ -549,20 +651,7 @@ const PhonesInOne = (props: props) => {
               }
             />
           </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"Resolution"} value={"Resolution"} />
-            </div>
-            <TextInput
-              id="Resolution"
-              type={"text"}
-              value={Resolution}
-              placeholder={"123"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setResolution(e.target.value)
-              }
-            />
-          </div>
+          <DisplayResolutionsection />
           <div className="mb-2">
             <div className="mb-2 block">
               <Label htmlFor={"FPS"} value={"Pixels per inch"} />
@@ -582,33 +671,166 @@ const PhonesInOne = (props: props) => {
     };
 
     const HardwareForm = () => {
-      const {
-        Processor,
-        setProcessor,
-        ProcessorName,
-        setProcessorName,
-        RAM,
-        setRAM,
-        ROM,
-        setROM,
-      } = useContext(PhoneContext);
+      const { ProcessorName, setProcessorName } = useContext(PhoneContext);
 
-      return (
-        <div className="max-w-xl my-4">
+      const RamSection = () => {
+        const { RAM, setRAM } = useContext(PhoneContext);
+        const [RamSelectArray, setRamSelectArray] = useState<string[]>([
+          "2GB",
+          "3GB",
+          "4GB",
+          "6GB",
+          "8GB",
+          "12GB",
+          "16GB",
+          "32GB",
+        ]);
+
+        useEffect(() => {
+          RAM.map((ram) => {
+            setRamSelectArray(RamSelectArray.filter((R) => R !== ram));
+          });
+        }, [RAM]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"RAM"} value={"RAM"} />
+            </div>
+            <Select
+              onChange={(e) => {
+                setRAM([...(RAM as string[]), e.target.value]);
+                setRamSelectArray(
+                  RamSelectArray.filter((R) => R !== e.target.value)
+                );
+              }}
+            >
+              <option>Add RAM</option>
+              {RamSelectArray.map((N) => (
+                <option value={N}>{N}</option>
+              ))}
+            </Select>
+            <div>
+              {(RAM as string[]).map((N) => (
+                <div
+                  className="flex items-center mt-2 bg-slate-50 hover:bg-slate-100 py-2 px-3 rounded justify-between"
+                  key={N}
+                >
+                  <div className="text-sm">{N}</div>
+                  <div className="text-sm">
+                    <button
+                      className="text-red-500"
+                      onClick={() => {
+                        setRAM(RAM.filter((R) => R !== N));
+                        setRamSelectArray([...RamSelectArray, N]);
+                      }}
+                      title={`remove ${N}`}
+                    >
+                      <XMarkIcon aria-hidden="true" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      const RomSection = () => {
+        const { ROM, setROM } = useContext(PhoneContext);
+        const [RomSelectArray, setRomSelectArray] = useState<string[]>([
+          "16GB",
+          "32GB",
+          "64GB",
+          "128GB",
+          "256GB",
+          "512GB",
+          "1TB",
+        ]);
+
+        useEffect(() => {
+          ROM.map((rom) => {
+            setRomSelectArray(RomSelectArray.filter((R) => R !== rom));
+          });
+        }, [ROM]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"RAM"} value={"RAM"} />
+            </div>
+            <Select
+              onChange={(e) => {
+                setROM([...(ROM as string[]), e.target.value]);
+                setRomSelectArray(
+                  RomSelectArray.filter((R) => R !== e.target.value)
+                );
+              }}
+            >
+              <option>Add ROM</option>
+              {RomSelectArray.map((N) => (
+                <option value={N}>{N}</option>
+              ))}
+            </Select>
+            <div>
+              {(ROM as string[]).map((N) => (
+                <div
+                  className="flex items-center mt-2 bg-slate-50 hover:bg-slate-100 py-2 px-3 rounded justify-between"
+                  key={N}
+                >
+                  <div className="text-sm">{N}</div>
+                  <div className="text-sm">
+                    <button
+                      className="text-red-500"
+                      onClick={() => {
+                        setROM((ROM as string[]).filter((R) => R !== N));
+                        setRomSelectArray([...RomSelectArray, N]);
+                      }}
+                      title={`remove ${N}`}
+                    >
+                      <XMarkIcon aria-hidden="true" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      const Processorsection = () => {
+        const { Processor, setProcessor } = useContext(PhoneContext);
+        const [ProcessorArray, setProcessorArray] = useState<string[]>([
+          "Apple",
+          "Snapdragon",
+          "Exynos",
+          "Dimensity",
+          "Kirin",
+        ]);
+
+        return (
           <div className="mb-2">
             <div className="mb-2 block">
               <Label htmlFor={"Processor"} value={"Processor"} />
             </div>
-            <TextInput
+            <Select
               id="Processor"
-              type={"text"}
               value={Processor}
-              placeholder={"Octa FX"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setProcessor(e.target.value)
-              }
-            />
+              onChange={(e) => setProcessor(e.target.value)}
+            >
+              <option>Add Processor</option>
+              {ProcessorArray.map((Processor) => (
+                <option value={Processor} key={Processor}>
+                  {Processor}
+                </option>
+              ))}
+            </Select>
           </div>
+        );
+      };
+      return (
+        <div className="max-w-xl my-4">
+          <Processorsection />
           <div className="mb-2">
             <div className="mb-2 block">
               <Label htmlFor={"ProcessorName"} value={"Processor name"} />
@@ -623,34 +845,8 @@ const PhonesInOne = (props: props) => {
               }
             />
           </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"RAM"} value={"RAM"} />
-            </div>
-            <TextInput
-              id="RAM"
-              type={"text"}
-              placeholder="8 gb"
-              value={RAM}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setRAM(e.target.value)
-              }
-            />
-          </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"ROM"} value={"Internal storage"} />
-            </div>
-            <TextInput
-              id="ROM"
-              type={"text"}
-              value={ROM}
-              placeholder={"128 gb"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setROM(e.target.value)
-              }
-            />
-          </div>
+          <RamSection />
+          <RomSection />
         </div>
       );
     };
@@ -770,6 +966,33 @@ const PhonesInOne = (props: props) => {
       );
     };
 
+    const NetworkForm = () => {
+      const { Network, setNetwork } = useContext(PhoneContext);
+      const networks = ["3G", "4G", "5G"];
+
+      return (
+        <div className="max-w-xl my-4">
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"Network"} value={"Network"} />
+            </div>
+            <Select
+              id="Network"
+              value={Network}
+              onChange={(e) => setNetwork(e.target.value)}
+            >
+              <option>Add Network</option>
+              {networks.map((n) => (
+                <option value={n} key={n}>
+                  {n}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </div>
+      );
+    };
+
     const SavBtn = () => {
       const { hendleUpload } = useContext(PhoneContext);
       return (
@@ -777,7 +1000,12 @@ const PhonesInOne = (props: props) => {
           <Button className="float-right ml-4" onClick={() => hendleUpload()}>
             Save
           </Button>
-          <Button color={"gray"} className="float-right" outline>
+          <Button
+            color={"gray"}
+            className="float-right"
+            outline
+            onClick={() => Router.push("/admin/manage-data")}
+          >
             Cencel
           </Button>
         </div>
@@ -785,7 +1013,7 @@ const PhonesInOne = (props: props) => {
     };
 
     return (
-      <>
+      <Fragment>
         <div className="bg-white border rounded-xl p-6 mb-4">
           <h2 className="font-outfit text-primary-0 text-xl underline font-medium">
             General
@@ -829,6 +1057,14 @@ const PhonesInOne = (props: props) => {
         </div>
         <div className="bg-white border rounded-xl p-6 mb-4">
           <h2 className="font-outfit text-primary-0 text-xl underline font-medium">
+            Network
+          </h2>
+          <div>
+            <NetworkForm />
+          </div>
+        </div>
+        <div className="bg-white border rounded-xl p-6 mb-4">
+          <h2 className="font-outfit text-primary-0 text-xl underline font-medium">
             Buy At
           </h2>
           <div>
@@ -836,7 +1072,7 @@ const PhonesInOne = (props: props) => {
           </div>
         </div>
         <SavBtn />
-      </>
+      </Fragment>
     );
   };
 
@@ -848,6 +1084,9 @@ const PhonesInOne = (props: props) => {
           <div className="bg-gray-50 p-16">
             <PhoneFormUpdate />
           </div>
+          <Head>
+            <title>{props.data.id} - Edit Phone | Admin - Phonew</title>
+          </Head>
         </AdminLayout>
       </PhoneProvider>
     </ImageIDProvider>
@@ -861,8 +1100,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const { id } = ctx.query;
 
+  if (id == "manage-data") {
+    return {
+      redirect: { destination: "/admin/manage-data", permanent: false },
+    };
+  }
+
   const res = await fetch(
-    process.env.API_URL + "/phones/" + id + "?populate=*",
+    process.env.API_URL + "/phones/" + id + "?populate=image,brand",
     {
       headers: {
         Authorization: `Bearer ${process.env.API_TOKEN}`,
@@ -876,7 +1121,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     id: data.id,
     name: data.attributes.name,
     price: data.attributes.price,
-    brand: data.attributes.brand,
+    brand: data.attributes.brand.data.id,
+    network: data.attributes.network,
     display: {
       size: data.attributes.Displaysize,
       resolution: data.attributes.DisplayResolution,
@@ -887,8 +1133,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     hardware: {
       processor: data.attributes.hardwareprocessor,
       processorName: data.attributes.hardwareprocessorname,
-      RAM: data.attributes.hardwareRAM,
-      ROM: data.attributes.hardwareROM,
+      RAM: data.attributes.RAM === null ? [] : data.attributes.RAM,
+      ROM: data.attributes.ROM === null ? [] : data.attributes.ROM,
     },
     camera: {
       rear: data.attributes.camerarear,

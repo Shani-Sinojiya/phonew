@@ -70,7 +70,7 @@ const Phone = (props: Props) => {
   const { data } = props;
   return (
     <HeaderFooterLayout pageTitle={data.brand + " " + data.name}>
-      <div className="py-8 px-32 bg-[#F8F8F8] font-outfit">
+      <div className="py-8 px-32 bg-[#F8F8F8] font-outfit max-md:px-4">
         <div className="w-full bg-white border rounded-lg border-[#A4A4A4] md:p-4">
           <div className="md:grid grid-cols-8 h-full md:gap-4 grid">
             <Carousel
@@ -152,7 +152,7 @@ const Phone = (props: Props) => {
                       Buy at
                     </h3>
                     <Link
-                      href={data.buyAt.flipkart}
+                      href={data.buyAt.amazon}
                       className="bg-black flex items-center justify-center py-3 px-4 rounded-xl"
                     >
                       <svg
@@ -357,7 +357,7 @@ const Phone = (props: Props) => {
                         <li>{data.brand}</li>
                         <li>{data.name}</li>
                         <li>{data.general.release}</li>
-                        <li>{data.general.weight}</li>
+                        <li>{data.general.weight}gm</li>
                         <li>{data.general.IPrating}</li>
                         <li>{data.general.fastcharging ? "Yes" : "No"}</li>
                         <li>{data.general.colours}</li>
@@ -426,8 +426,8 @@ const Phone = (props: Props) => {
                     </div>
                     <div className="font-medium text-[#1C1C1C] col-span-3">
                       <ul className="gap-4 grid">
-                        <li>{data.camera.rear}</li>
-                        <li>{data.camera.front}</li>
+                        <li>{data.camera.rear}MP</li>
+                        <li>{data.camera.front}MP</li>
                         <li>{data.camera.number}</li>
                       </ul>
                     </div>
@@ -463,7 +463,7 @@ const Phone = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const res = await PhoneClass.getPhone(
-    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=image"
+    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=image,brand"
   );
   if (res.error) {
     return {

@@ -1,0 +1,22 @@
+{
+  "kind": "singleType",
+  "collectionName": "ratings",
+  "info": {
+    "singularName": "rating",
+    "pluralName": "ratings",
+    "displayName": "rating",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rating": {
+      "type": "decimal",
+      "max": 5,
+      "default": 0,
+      "min": 0
+    }
+  }
+}

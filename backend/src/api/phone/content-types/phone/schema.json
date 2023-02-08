@@ -15,9 +15,6 @@
     "name": {
       "type": "string"
     },
-    "brand": {
-      "type": "string"
-    },
     "release": {
       "type": "date"
     },
@@ -86,14 +83,23 @@
     "buyatflipkart": {
       "type": "string"
     },
-    "hardwareRAM": {
-      "type": "string"
-    },
-    "hardwareROM": {
-      "type": "string"
-    },
     "DisplayPPI": {
       "type": "string"
+    },
+    "brand": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brand.brand",
+      "inversedBy": "phones"
+    },
+    "network": {
+      "type": "string"
+    },
+    "RAM": {
+      "type": "json"
+    },
+    "ROM": {
+      "type": "json"
     }
   }
 }

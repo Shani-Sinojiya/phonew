@@ -1,4 +1,9 @@
 import { HeaderFooterLayout } from "@/layouts";
+import {
+  ArrowPathIcon,
+  CheckIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Router from "next/router";
 import { useState } from "react";
@@ -17,38 +22,52 @@ const Contact = () => {
   const [show, setShow] = useState<boolean>(true);
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-    setShow(false);
-    const res = await fetch(process.env.API_URL + "/contact-forms", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
-      },
-      body: JSON.stringify({
-        data: {
-          name: Name,
-          email: Email,
-          details: Detail,
-        },
-      }),
-    });
-    if (res.status === 200) {
-      setIsSubmitted(true);
-      setIsSubmitting(false);
-      Router.push("/contact");
-    } else {
+    if (Name === "" || Email === "" || Detail === "") {
+      setShow(false);
       setIsError(true);
-      setIsSubmitting(false);
       setIsSubmitted(false);
-    }
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsError(false);
+        setShow(true);
+      }, 3000);
+    } else {
+      setIsSubmitting(true);
+      setShow(false);
+      const res = await fetch(process.env.API_URL + "/contact-forms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+        body: JSON.stringify({
+          data: {
+            name: Name,
+            email: Email,
+            details: Detail,
+          },
+        }),
+      });
+      if (res.status === 200) {
+        setIsSubmitted(true);
+        setIsSubmitting(false);
+        Router.push("/contact");
+      } else {
+        setIsError(true);
+        setIsSubmitting(false);
+        setIsSubmitted(false);
+      }
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setIsError(false);
-      setIsSubmitting(false);
-      setShow(true);
-    }, 3000);
+      setTimeout(() => {
+        setDetail("");
+        setName("");
+        setEmail("");
+        setIsSubmitted(false);
+        setIsError(false);
+        setIsSubmitting(false);
+        setShow(true);
+      }, 3000);
+    }
   };
 
   return (
@@ -120,64 +139,24 @@ const Contact = () => {
                   rows={3}
                   className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border resize-none"
                 ></textarea>
-
                 <button
                   className={classNames(
-                    "border-primary-1 border text-primary-1 flex justify-center hover:text-white hover:bg-primary-1 font-outfit font-semibold text-base rounded-full px-8 py-2",
-                    isSubmitting ? "cursor-not-allowed" : "",
-                    isSubmitted ? "bg-green-400 !text-white" : "",
-                    isError ? "bg-red-500 text-white" : ""
+                    "flex justify-center font-outfit font-semibold text-base rounded-full px-8 py-2",
+                    isSubmitting
+                      ? "cursor-not-allowed hover:text-white hover:bg-primary-1 "
+                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
+                    isSubmitted
+                      ? "bg-green-400 !text-white border-green-800 border hover:bg-green-600"
+                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
+                    isError
+                      ? "bg-red-500 !text-white border-red-500 border hover:bg-red-700"
+                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1"
                   )}
                   onClick={() => handleSubmit()}
                 >
-                  {isError && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  )}
-                  {isSubmitting && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                      />
-                    </svg>
-                  )}
-                  {isSubmitted && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  )}
+                  {isError && <XMarkIcon className="w-6 h-6" />}
+                  {isSubmitting && <ArrowPathIcon className="w-6 h-6" />}
+                  {isSubmitted && <CheckIcon className="w-6 h-6" />}
                   {show && "Submit"}
                 </button>
 

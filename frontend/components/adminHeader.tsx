@@ -16,13 +16,18 @@ const AdminHeader = () => {
       link: "/admin/manage-data",
       active: router.asPath === "/admin/manage-data" ? true : false,
     },
+    {
+      name: "Manage brand",
+      link: "/admin/manage-brand",
+      active: router.asPath === "/admin/manage-brand" ? true : false,
+    },
   ];
   return (
     <Navbar fluid={true} rounded={true}>
       <Navbar.Brand to="/admin/dashboard">
-        <span className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
+        <Link href={"/admin/dashboard"} className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
           Phonew
-        </span>
+        </Link>
       </Navbar.Brand>
       <Navbar.Toggle color="gray" />
       <Navbar.Collapse className="mr-16 max-md:mr-0">

@@ -1,3 +1,4 @@
+import { phoneMetadata } from "@/types/phones";
 import type { Imagedata, Phones } from "@/types/Phones.type";
 
 class phone {
@@ -10,7 +11,8 @@ class phone {
       id: data.id,
       name: data.attributes.name,
       price: data.attributes.price,
-      brand: data.attributes.brand,
+      brand: data.attributes.brand.data.attributes.name,
+      network: data.attributes.network,
       display: {
         size: data.attributes.Displaysize,
         resolution: data.attributes.DisplayResolution,
@@ -105,6 +107,31 @@ class phone {
       error: false,
       data: this.toNormalFormat(data),
     };
+  }
+
+  async SearchPhone(name: string) {
+    const { data, meta, error } = await this.getPhones(
+      process.env.API_URL +
+        "/phones?sort[0]=release:desc&populate=image&fields[0]=name&fields[1]=release&filters[name][$containsi]=" +
+        name
+    );
+
+    const allPhones = data.map((phone: phoneMetadata) => {
+      const image =
+        phone.attributes.image.data == null
+          ? null
+          : phone.attributes.image.data.map(
+              (image) => image.attributes.formats.thumbnail.url
+            );
+      return {
+        id: phone.id,
+        phonename: phone.attributes.name,
+        updateAt: phone.attributes.release,
+        image: image == null ? "" : image[0],
+      };
+    });
+
+    return { data: allPhones, meta, error };
   }
 }
 

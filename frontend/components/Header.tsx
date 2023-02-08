@@ -15,10 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { StrictMode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "@/lib";
 
 const Header = () => {
   const NavBarForHeader = () => {

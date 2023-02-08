@@ -123,11 +123,6 @@ const Search = () => {
               </div>
             }
             className="grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
-            endMessage={
-              <p className="text-center text-[#8E8E8E] font-normal">
-                <b>You have seen it all</b>
-              </p>
-            }
           >
             {Data.map((data) => (
               <Card key={data.id} {...data} />

@@ -27,10 +27,10 @@ interface CreatePhoneContextData {
   setProcessor: (Processor: string) => void;
   ProcessorName: string | undefined;
   setProcessorName: (ProcessorName: string) => void;
-  RAM: string | undefined;
-  setRAM: (RAM: string) => void;
-  ROM: string | undefined;
-  setROM: (ROM: string) => void;
+  RAM: string[];
+  setRAM: (RAM: string[]) => void;
+  ROM: string[];
+  setROM: (ROM: string[]) => void;
 
   // Display
   Type: string | undefined;
@@ -47,8 +47,8 @@ interface CreatePhoneContextData {
   // General
   phoneName: string | undefined;
   setPhoneName: (phoneName: string) => void;
-  BrandName: string | undefined;
-  setBrandName: (BrandName: string) => void;
+  BrandName: number | undefined;
+  setBrandName: (BrandName: number) => void;
   RsDate: string | undefined;
   setRsDate: (RsDate: string) => void;
   Weight: string | undefined;
@@ -65,6 +65,10 @@ interface CreatePhoneContextData {
   setBattery: (Battery: string) => void;
   Price: string | undefined;
   setPrice: (Price: string) => void;
+
+  // network
+  Network: string | undefined;
+  setNetwork: (Network: string) => void;
 }
 
 const CreatePhoneContext = createContext<CreatePhoneContextData>(

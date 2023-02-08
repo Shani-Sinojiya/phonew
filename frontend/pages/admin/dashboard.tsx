@@ -4,7 +4,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import type { contactDataApi, data, pagination } from "@/types/contact.type";
+import type { data, pagination } from "@/types/contact.type";
+import { AdminBrand } from "@/data";
 
 type props = {
   data: string;
@@ -17,6 +18,7 @@ type props = {
     }[];
     pagination: pagination;
   };
+  totalBrands: number;
 };
 
 const AdminDashboard = (props: props) => {
@@ -25,6 +27,7 @@ const AdminDashboard = (props: props) => {
     text: string;
     item?: string;
     link?: boolean;
+    linkurl?: string;
   }) => {
     if (props.color == "red") {
       return (
@@ -53,7 +56,7 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={"/admin/phone/create"}>
+                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -103,7 +106,7 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={"/admin/phone/create"}>
+                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -153,7 +156,7 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={"/admin/phone/create"}>
+                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -202,7 +205,7 @@ const AdminDashboard = (props: props) => {
           <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
             {props.item}{" "}
             {props.link ? (
-              <Link href={"/admin/phone/create"}>
+              <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -230,29 +233,35 @@ const AdminDashboard = (props: props) => {
       <AdminHeader />
       <div className="my-16 mx-16 grid grid-cols-4 gap-8">
         <DashCard color="blue" text="Total Phone" item={props.data} />
-        <DashCard color="red" text="Phones" item={props.data} />
-        <DashCard color="pink" text="Product" item={props.data} />
-        <DashCard color={"orange"} text="Create a Product" link />
+        <DashCard
+          color="red"
+          text="Total Brand"
+          item={props.totalBrands as unknown as string}
+        />
+        <DashCard
+          color="pink"
+          text="Create Band"
+          link
+          linkurl="/admin/manage-brand"
+        />
+        <DashCard
+          color={"orange"}
+          text="Create a Phone"
+          link
+          linkurl="/admin/manage-brand"
+        />
       </div>
       <div className="my-16 mx-16">
         <h1 className="text-2xl font-semibold text-gray-900">Contact Forms</h1>
-
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+        <div className="relative overflow-x-hidden shadow-md sm:rounded-lg mt-4">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3">
-                  Id
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Details
-                </th>
+                {["Id", "Name", "Email", "Details"].map((item) => (
+                  <th scope="col" className="px-6 py-3" key={item}>
+                    {item}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -367,12 +376,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   };
 
+  const brand = new AdminBrand();
+  const brandData = await brand.getBrandsWithOutPopulate();
+
   const contact = await contectForm();
 
   return {
     props: {
       data: data.phones.meta.pagination.total,
       contact: contact,
+      totalBrands: brandData.meta.pagination.total,
     },
   };
 };
