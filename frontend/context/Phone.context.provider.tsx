@@ -15,6 +15,7 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
 
   // software
   const [OS, setOS] = useState<string>();
+  const [OSVersion, setOSVersion] = useState<string>();
 
   // Camera
   const [Rear, setRear] = useState<string>();
@@ -42,7 +43,7 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
   const [IPRating, setIPRating] = useState<string>();
   const [FastCharing, setFastCharing] = useState<boolean>();
   const [Color, setColor] = useState<string>();
-  const [Security, setSecurity] = useState<string>();
+  const [Security, setSecurity] = useState<string[]>([]);
   const [Battery, setBattery] = useState<string>();
   const [Price, setPrice] = useState<string>();
   const [Network, setNetwork] = useState<string>();
@@ -93,32 +94,32 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
 
       const body: Phone = {
         image: ImageIdArray,
-        name: phoneName as string,
+        name: phoneName.trim() as string,
         brand: BrandName as number,
-        release: RsDate as string,
+        release: RsDate.trim() as string,
         weight: Number(Weight),
-        IPrating: IPRating as string,
+        IPrating: IPRating.trim() as string,
         fastcharging: FastCharing == undefined ? false : FastCharing,
-        colours: Color as string,
-        security: Security as string,
-        battery: Battery as string,
-        buyatamazon: Amazon as string,
-        buyatflipkart: Filpkart as string,
-        OS: OS as string,
-        camerarear: Rear as string,
-        camerafront: Front as string,
-        camerano: Number(NoOFCamera),
-        DisplayRefreshRate: Refreshrate as string,
-        Displaytype: Type as string,
-        Displaysize: Size as string,
-        DisplayResolution: Resolution as string,
-        DisplayPPI: FPS as string,
-        hardwareprocessor: Processor as string,
-        hardwareprocessorname: ProcessorName as string,
-        price: Number(Price),
-        network: Network as string,
-        RAM: RAM,
-        ROM: ROM,
+        colours: Color.trim() as string,
+        security: Security as string[],
+        battery: Battery.trim() as string,
+        buyatamazon: Amazon.trim() as string,
+        buyatflipkart: Filpkart.trim() as string,
+        OS: (OS.trim() + " " + OSVersion?.trim()) as string,
+        camerarear: Rear.trim() as string,
+        camerafront: Front.trim() as string,
+        camerano: Number(NoOFCamera.trim()),
+        DisplayRefreshRate: Refreshrate.trim() as string,
+        Displaytype: Type.trim() as string,
+        Displaysize: Size.trim() as string,
+        DisplayResolution: Resolution.trim() as string,
+        DisplayPPI: FPS.trim() as string,
+        hardwareprocessor: Processor.trim() as string,
+        hardwareprocessorname: ProcessorName.trim() as string,
+        price: Number(Price.trim()),
+        network: Network.trim() as string,
+        RAM: RAM as string[],
+        ROM: ROM as string[],
       };
 
       const res = await fetch(process.env.API_URL + "/phones/" + id, {
@@ -176,7 +177,11 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
     setRefreshrate(d.display.fps);
     setSize(d.display.size);
     setResolution(d.display.resolution);
-    setOS(d.general.os);
+
+    const os = d.general.os.split(" ");
+    setOS(os[0]);
+    setOSVersion(os[1]);
+
     setFPS(d.display.PPI);
     setRsDate(d.general.release);
     setWeight(String(d.general.weight));
@@ -220,6 +225,8 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
     Price,
     Security,
     Network,
+    OSVersion,
+    setOSVersion,
     setNetwork,
     setAllData,
     setFilpkart,

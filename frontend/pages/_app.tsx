@@ -19,7 +19,7 @@ Router.events.on("routeChangeError", progress.finish);
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <SessionProvider session={pageProps.session} basePath="/api/auth">
+      <SessionProvider session={pageProps.session}>
         <Component {...pageProps} />
       </SessionProvider>
     </Provider>

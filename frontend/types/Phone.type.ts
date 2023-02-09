@@ -18,7 +18,7 @@ type Phone = {
   camerafront: string;
   camerano: number;
   OS: string;
-  security: string;
+  security: string[];
   battery: string;
   price: number;
   buyatamazon: string;

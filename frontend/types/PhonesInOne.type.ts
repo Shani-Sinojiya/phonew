@@ -30,7 +30,7 @@ type general = {
   IPrating: string;
   colours: string;
   fastcharging: boolean;
-  security: string;
+  security: string[];
   release: string;
 };
 

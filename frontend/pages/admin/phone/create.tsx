@@ -357,6 +357,14 @@ const PhoneCreate = () => {
           "Iris Scanning",
         ]);
 
+        useEffect(() => {
+          for (let i = 0; i < Security.length; i++) {
+            const index = securityArray.indexOf(Security[i]);
+            securityArray.splice(index, 1);
+          }
+          setSecurityArray([...securityArray]);
+        }, [Security]);
+
         return (
           <div className="mb-2">
             <div className="mb-2 block">
@@ -364,7 +372,15 @@ const PhoneCreate = () => {
             </div>
             <Select
               value={Security}
-              onChange={(e) => setSecurity(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                const index = securityArray.indexOf(value);
+                const s = Security;
+                securityArray.splice(index, 1);
+                setSecurityArray([...securityArray]);
+                s.push(value);
+                setSecurity(s);
+              }}
             >
               <option>Add Security</option>
               {securityArray.map((security) => (
@@ -373,6 +389,28 @@ const PhoneCreate = () => {
                 </option>
               ))}
             </Select>
+            <div>
+              {Security?.map((N) => (
+                <div
+                  className="flex items-center mt-2 bg-slate-50 hover:bg-slate-100 py-2 px-3 rounded justify-between"
+                  key={N}
+                >
+                  <div className="text-sm">{N}</div>
+                  <div className="text-sm">
+                    <button
+                      className="text-red-500"
+                      onClick={() => {
+                        setSecurity(Security.filter((R) => R !== N));
+                        setSecurityArray([...securityArray, N]);
+                      }}
+                      title={`remove ${N}`}
+                    >
+                      <XMarkIcon aria-hidden="true" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         );
       };
@@ -403,6 +441,7 @@ const PhoneCreate = () => {
               value={BrandName}
               onChange={(e) => setBrandName(Number(e.target.value))}
             >
+              <option>Add Brand</option>
               {BrandNameArrayLoading ? (
                 <option value={0}>Loading...</option>
               ) : (
@@ -674,6 +713,14 @@ const PhoneCreate = () => {
           "32GB",
         ]);
 
+        useEffect(() => {
+          for (let i = 0; i < RAM.length; i++) {
+            const index = RamSelectArray.indexOf(RAM[i]);
+            RamSelectArray.splice(index, 1);
+          }
+          setRamSelectArray([...RamSelectArray]);
+        }, [RAM]);
+
         return (
           <div className="mb-2">
             <div className="mb-2 block">
@@ -681,10 +728,13 @@ const PhoneCreate = () => {
             </div>
             <Select
               onChange={(e) => {
-                setRAM([...(RAM as string[]), e.target.value]);
-                setRamSelectArray(
-                  RamSelectArray.filter((R) => R !== e.target.value)
-                );
+                const value = e.target.value;
+                const index = RamSelectArray.indexOf(value);
+                const s = RAM;
+                RamSelectArray.splice(index, 1);
+                setRamSelectArray([...RamSelectArray]);
+                s.push(value);
+                setRAM(s);
               }}
             >
               <option>Add RAM</option>
@@ -732,6 +782,14 @@ const PhoneCreate = () => {
           "1TB",
         ]);
 
+        useEffect(() => {
+          for (let i = 0; i < ROM.length; i++) {
+            const index = RomSelectArray.indexOf(ROM[i]);
+            RomSelectArray.splice(index, 1);
+          }
+          setRomSelectArray([...RomSelectArray]);
+        }, [ROM]);
+
         return (
           <div className="mb-2">
             <div className="mb-2 block">
@@ -739,10 +797,13 @@ const PhoneCreate = () => {
             </div>
             <Select
               onChange={(e) => {
-                setROM([...ROM, e.target.value]);
-                setRomSelectArray(
-                  RomSelectArray.filter((R) => R !== e.target.value)
-                );
+                const value = e.target.value;
+                const index = RomSelectArray.indexOf(value);
+                const s = ROM;
+                RomSelectArray.splice(index, 1);
+                setRomSelectArray([...RomSelectArray]);
+                s.push(value);
+                setROM(s);
               }}
             >
               <option>Add ROM</option>
@@ -786,6 +847,7 @@ const PhoneCreate = () => {
           "Exynos",
           "Dimensity",
           "Kirin",
+          "Mediatek",
         ]);
 
         return (
@@ -885,23 +947,42 @@ const PhoneCreate = () => {
     };
 
     const SoftwareForm = () => {
-      const { OS, setOS } = useContext(CreatePhoneContext);
+      const { OS, setOS, OSVersion, setOSVersion } =
+        useContext(CreatePhoneContext);
 
       return (
         <div className="max-w-xl my-4">
           <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"OS"} value={"Operating System"} />
+            <label
+              htmlFor="OperatingSystem"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Operating System
+            </label>
+            <div className="relative mt-1 rounded-md shadow-sm">
+              <input
+                type="text"
+                id="OperatingSystem"
+                className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="16"
+                value={OSVersion}
+                onChange={(e) => setOSVersion(e.target.value)}
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center">
+                <label htmlFor="OS" className="sr-only">
+                  OS
+                </label>
+                <select
+                  id="OS"
+                  value={OS}
+                  className="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  onChange={(e) => setOS(e.target.value)}
+                >
+                  <option selected>iOS</option>
+                  <option>Android</option>
+                </select>
+              </div>
             </div>
-            <TextInput
-              id="OS"
-              type={"text"}
-              value={OS}
-              placeholder={"iOS 14"}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setOS(e.target.value)
-              }
-            />
           </div>
         </div>
       );

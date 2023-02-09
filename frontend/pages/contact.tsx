@@ -38,7 +38,6 @@ const Contact = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
         body: JSON.stringify({
           data: {
@@ -114,13 +113,19 @@ const Contact = () => {
               <h2 className="text-primary-0 text-lg font-semibold max-md:mt-4">
                 You can also fill out the contact form below
               </h2>
-              <div className="grid grid-cols-2 gap-4 mx-auto">
+              <form
+                className="grid grid-cols-2 gap-4 mx-auto"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
                 <input
                   required
                   type="text"
                   value={Name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Name"
+                  placeholder="Name *"
                   className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
                 />
                 <input
@@ -128,14 +133,14 @@ const Contact = () => {
                   type="email"
                   value={Email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
+                  placeholder="Email *"
                   className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
                 />
                 <textarea
                   required
                   value={Detail}
                   onChange={(e) => setDetail(e.target.value)}
-                  placeholder="Details"
+                  placeholder="Details *"
                   rows={3}
                   className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border resize-none"
                 ></textarea>
@@ -152,7 +157,7 @@ const Contact = () => {
                       ? "bg-red-500 !text-white border-red-500 border hover:bg-red-700"
                       : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1"
                   )}
-                  onClick={() => handleSubmit()}
+                  type="submit"
                 >
                   {isError && <XMarkIcon className="w-6 h-6" />}
                   {isSubmitting && <ArrowPathIcon className="w-6 h-6" />}
@@ -163,7 +168,7 @@ const Contact = () => {
                 <p className="font-semibold text-xs flex justify-center font-outfit text-primary-3 max-w-[11rem]">
                   We will get back to you as soon as possible.
                 </p>
-              </div>
+              </form>
             </div>
           </div>
         </div>

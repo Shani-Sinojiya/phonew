@@ -38,7 +38,7 @@ type general = {
   IPrating: string;
   colours: string;
   fastcharging: boolean;
-  security: string;
+  security: string[];
   release: string;
 };
 
@@ -68,6 +68,28 @@ const PhoneClass = new phone();
 
 const Phone = (props: Props) => {
   const { data } = props;
+
+  const ReleseDate = (d: string) => {
+    const date = new Date(d);
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    return (
+      date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
+    );
+  };
   return (
     <HeaderFooterLayout pageTitle={data.brand + " " + data.name}>
       <div className="py-8 px-32 bg-[#F8F8F8] font-outfit max-md:px-4">
@@ -83,76 +105,69 @@ const Phone = (props: Props) => {
                   key={img.id}
                   src={process.env.API_IMAGE_URL + img.url}
                   alt={data.brand + " " + data.name}
-                  className="object-cover w-full h-full"
+                  className="object-contain w-full h-full"
                 />
               ))}
             </Carousel>
             <div className="md:col-span-6 max-md:col-span-5 max-md:p-4">
               <div className="grid grid-cols-2 my-1 md:pr-4 font-medium relative">
-                <h2 className="text-2xl border-b-2 border-b-primary-0/25 max-md:text-xl max-md:col-span-2">
+                <h2 className="text-2xl max-md:text-xl max-md:col-span-2">
                   {data.brand + " " + data.name}
                 </h2>
-                <div className="max-md:absolute max-md:right-0 max-md:top-1">
-                  <span className="max-md:block hidden float-right rounded-full cursor-pointer text-primary-1">
-                    <svg
-                      className="w-5 h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                      />
-                    </svg>
-                  </span>
+              </div>
+              <div className="p-4 rounded-xl mt-4 bg-[#EDF1FF9C]">
+                <h2 className="underline text-xl font-outfit font-normal text-[#1c1c1c]">Key features:</h2>
+                <div className="grid md:grid-cols-6 md:gap-3 my-2 max-md:grid-cols-8">
+                  <CardDetail
+                    title="Display"
+                    details={
+                      data.display.size +
+                      " inch | " +
+                      data.display.type +
+                      " | " +
+                      data.display.PPI +
+                      "PPI | " +
+                      data.display.fps +
+                      "hz"
+                    }
+                  />
+                  <CardDetail
+                    title="Storage"
+                    details={data.hardware.ROM.join(" | ")}
+                  />
+                  <CardDetail
+                    title="RAM"
+                    details={data.hardware.RAM.join(" | ")}
+                  />
+                  <CardDetail
+                    title="Processor"
+                    details={
+                      data.hardware.processor +
+                      " " +
+                      data.hardware.processorName
+                    }
+                  />
+                  <CardDetail
+                    title="Camera"
+                    details={
+                      "Front: " +
+                      data.camera.front +
+                      " MP | Rear: " +
+                      data.camera.rear +
+                      " MP"
+                    }
+                  />
+                  <CardDetail
+                    title="Security"
+                    details={data.general.security?.join(" | ")}
+                  />
+                  <CardDetail
+                    title="Battery"
+                    details={data.general.battery + "mAh"}
+                  />
                 </div>
               </div>
-              <div className="grid md:grid-cols-6 md:gap-3 my-2 max-md:grid-cols-8">
-                <CardDetail
-                  title="Display"
-                  details={
-                    data.display.size +
-                    " | " +
-                    data.display.type +
-                    " | " +
-                    data.display.PPI +
-                    "PPI | " +
-                    data.display.fps
-                  }
-                />
-                <CardDetail
-                  title="Storage"
-                  details={data.hardware.ROM.join(" | ")}
-                />
-                <CardDetail
-                  title="RAM"
-                  details={data.hardware.RAM.join(" | ")}
-                />
-                <CardDetail
-                  title="Processor"
-                  details={data.hardware.processorName}
-                />
-                <CardDetail
-                  title="Camera"
-                  details={
-                    "Front: " +
-                    data.camera.front +
-                    " MP | Rear: " +
-                    data.camera.rear +
-                    " MP"
-                  }
-                />
-                <CardDetail title="Security" details={data.general.security} />
-                <CardDetail
-                  title="Battery"
-                  details={data.general.battery + "mAh"}
-                />
-              </div>
-              <div className="border-t-2 w-full border-primary-0/25 my-2">
+              <div className="w-full mt-4 mb-2">
                 <div className="grid md:grid-cols-2 mt-1 md:rounded-full bg-[#F0F0F0] md:p-4 max-md:p-2 md:gap-2 max-md:gap-1 md:divide-x-2 max-md:divide-y-2 divide-slate-300 divide-solid max-md:rounded-xl">
                   <div className="grid grid-cols-3 gap-4 text-center md:place-content-center">
                     <h3 className="font-medium text-lg flex items-center justify-center">
@@ -366,9 +381,9 @@ const Phone = (props: Props) => {
                       <ul className="gap-4 grid">
                         <li>{data.brand}</li>
                         <li>{data.name}</li>
-                        <li>{data.general.release}</li>
+                        <li>{ReleseDate(data.general.release)}</li>
                         <li>{data.general.weight}gm</li>
-                        <li>{data.general.IPrating}</li>
+                        <li>IP{data.general.IPrating}</li>
                         <li>{data.general.fastcharging ? "Yes" : "No"}</li>
                         <li>{data.general.colours}</li>
                       </ul>
@@ -393,8 +408,8 @@ const Phone = (props: Props) => {
                     <div className="font-medium text-[#1C1C1C] col-span-3">
                       <ul className="gap-4 grid">
                         <li>{data.display.type}</li>
-                        <li>{data.display.fps}</li>
-                        <li>{data.display.size}</li>
+                        <li>{data.display.fps}hz</li>
+                        <li>{data.display.size}inch</li>
                         <li>{data.display.resolution}</li>
                         <li>{data.display.PPI}</li>
                       </ul>

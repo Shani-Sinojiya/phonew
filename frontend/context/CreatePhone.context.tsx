@@ -13,6 +13,8 @@ interface CreatePhoneContextData {
   // software
   OS: string | undefined;
   setOS: (OS: string) => void;
+  OSVersion: string | undefined;
+  setOSVersion: (OSVersion: string) => void;
 
   // Camera
   Rear: string | undefined;
@@ -59,8 +61,8 @@ interface CreatePhoneContextData {
   setFastCharing: (FastCharing: boolean) => void;
   Color: string | undefined;
   setColor: (Color: string) => void;
-  Security: string | undefined;
-  setSecurity: (Security: string) => void;
+  Security: string[];
+  setSecurity: (Security: string[]) => void;
   Battery: string | undefined;
   setBattery: (Battery: string) => void;
   Price: string | undefined;

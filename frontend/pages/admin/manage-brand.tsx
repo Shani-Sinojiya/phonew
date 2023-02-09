@@ -181,7 +181,7 @@ const ManageBrand = (props: BrandProps) => {
         props.setShow(false);
         const tost = toast.loading("Creating...");
         const brand = new AdminBrand();
-        const { success } = await brand.createBrand(name);
+        const { success } = await brand.createBrand(name.trim());
         if (success) {
           toast.update(tost, {
             render: "Created",
@@ -304,7 +304,7 @@ const ManageBrand = (props: BrandProps) => {
     const onKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         const brand = new AdminBrand();
-        const { data, meta } = await brand.FindBrand(Name);
+        const { data, meta } = await brand.FindBrand(Name.trim());
         const allData = brand.toNameAndDateMany(data);
         props.setData(allData);
         props.setPagination(meta.pagination);
@@ -339,7 +339,7 @@ const ManageBrand = (props: BrandProps) => {
         props.setShow(false);
         const tost = toast.loading("Updating...");
         const brand = new AdminBrand();
-        const { success } = await brand.updateBrand(props.id, name);
+        const { success } = await brand.updateBrand(props.id, name.trim());
         if (success) {
           toast.update(tost, {
             render: "Updated",

@@ -258,13 +258,13 @@ const AdminDashboard = (props: props) => {
           color={"orange"}
           text="Create a Phone"
           link
-          linkurl="/admin/manage-brand"
+          linkurl="/admin/phone/create"
         />
       </div>
       <div className="my-16 mx-16 flex items-center gap-4 bg-slate-50 rounded-md p-8 text-2xl">
-        Rating: {props.rating}
+        Rating: {props.rating !== null ? props.rating : 0}
         <Rating
-          initialValue={props.rating}
+          initialValue={props.rating !== null ? props.rating : 0}
           readonly
           SVGclassName="inline-block"
           emptyClassName="flex"
@@ -272,7 +272,7 @@ const AdminDashboard = (props: props) => {
       </div>
       <div className="my-16 mx-16">
         <h1 className="text-2xl font-semibold text-gray-900">Contact Forms</h1>
-        <div className="relative overflow-x-hidden shadow-md sm:rounded-lg mt-4">
+        <div className="relative shadow-md sm:rounded-lg mt-4">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
@@ -396,7 +396,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     });
     const { data } = await response.json();
-    return data.attributes.rating;
+
+    if (data === null) {
+      return 0;
+    } else {
+      return data.attributes.rating;
+    }
   };
   const brand = new AdminBrand();
   const brandData = await brand.getBrandsNameAndDate();

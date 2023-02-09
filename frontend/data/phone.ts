@@ -69,7 +69,6 @@ class phone {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
     });
     const { data, meta } = await response.json();
@@ -92,7 +91,6 @@ class phone {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
     });
     const { data } = await response.json();

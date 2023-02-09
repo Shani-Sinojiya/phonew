@@ -70,7 +70,7 @@ type attributes = {
   camerafront: string;
   camerano: number;
   OS: string;
-  security: string;
+  security: string[];
   battery: string;
   price: number;
   buyatamazon: string;
@@ -114,7 +114,7 @@ type general = {
   IPrating: string;
   colours: string;
   fastcharging: boolean;
-  security: string;
+  security: string[];
   release: string;
 };
 

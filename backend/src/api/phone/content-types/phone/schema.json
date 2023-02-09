@@ -68,9 +68,6 @@
         "images"
       ]
     },
-    "security": {
-      "type": "string"
-    },
     "battery": {
       "type": "string"
     },
@@ -99,6 +96,9 @@
       "type": "json"
     },
     "ROM": {
+      "type": "json"
+    },
+    "security": {
       "type": "json"
     }
   }

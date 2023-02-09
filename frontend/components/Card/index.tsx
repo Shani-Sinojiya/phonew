@@ -17,7 +17,7 @@ const Card = (props: data) => {
               key={img.id}
               src={process.env.API_IMAGE_URL + img.url}
               alt={img.alt ? img.alt : img.id.toString()}
-              className="object-cover w-full h-full"
+              className="object-contain w-full h-full"
             />
           ))}
         </Carousel>
@@ -63,7 +63,8 @@ const Card = (props: data) => {
                 " | " +
                 props.display.PPI +
                 "PPI | " +
-                props.display.fps
+                props.display.fps +
+                "hz"
               }
             />
             <CardDetail
@@ -73,15 +74,24 @@ const Card = (props: data) => {
             <CardDetail title="RAM" details={props.hardware.RAM.join(" | ")} />
             <CardDetail
               title="Processor"
-              details={props.hardware.processorName}
+              details={
+                props.hardware.processor + " " + props.hardware.processorName
+              }
             />
             <CardDetail
               title="Camera"
               details={
-                "Front: " + props.camera.front + " MP | Rear: " + props.camera.rear + " MP"
+                "Front: " +
+                props.camera.front +
+                " MP | Rear: " +
+                props.camera.rear +
+                " MP"
               }
             />
-            <CardDetail title="Security" details={props.general.security} />
+            <CardDetail
+              title="Security"
+              details={props.general.security?.join(" | ")}
+            />
             <CardDetail
               title="Battery"
               details={props.general.battery + "mAh"}

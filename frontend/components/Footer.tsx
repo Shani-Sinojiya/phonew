@@ -14,7 +14,6 @@ const Footer = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
       body: JSON.stringify({
         data: {
@@ -31,7 +30,6 @@ const Footer = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
       });
       const { data } = await response.json();

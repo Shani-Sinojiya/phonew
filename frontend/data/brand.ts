@@ -9,17 +9,19 @@ class Brand {
     Authorization: this.ApiToken,
   };
 
-  protected async getBrandsWithOutPopulate() {
+  protected async getBrandsWithOutPopulate(useToken = true) {
     const response = await fetch(this.ApiUrl, {
       method: "GET",
-      headers: this.ApiHeader,
+      headers: useToken
+        ? this.ApiHeader
+        : { "Content-Type": "application/json" },
     });
     const { data, meta } = await response.json();
     return { data, meta };
   }
 
   public async getBrandsName() {
-    const brands: ServerBrand = await this.getBrandsWithOutPopulate();
+    const brands: ServerBrand = await this.getBrandsWithOutPopulate(false);
     const data = this.toNameMany(brands.data);
     return { data, meta: brands.meta };
   }
