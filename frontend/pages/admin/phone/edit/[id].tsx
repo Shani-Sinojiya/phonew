@@ -707,7 +707,9 @@ const PhonesInOne = (props: props) => {
             >
               <option>Add RAM</option>
               {RamSelectArray.map((N) => (
-                <option value={N}>{N}</option>
+                <option value={N} key={N}>
+                  {N}
+                </option>
               ))}
             </Select>
             <div>
@@ -769,7 +771,9 @@ const PhonesInOne = (props: props) => {
             >
               <option>Add ROM</option>
               {RomSelectArray.map((N) => (
-                <option value={N}>{N}</option>
+                <option value={N} key={N}>
+                  {N}
+                </option>
               ))}
             </Select>
             <div>

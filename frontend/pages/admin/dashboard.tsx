@@ -6,6 +6,7 @@ import Head from "next/head";
 import Link from "next/link";
 import type { data, pagination } from "@/types/contact.type";
 import { AdminBrand } from "@/data";
+import { Rating } from "react-simple-star-rating";
 
 type props = {
   data: string;
@@ -19,6 +20,7 @@ type props = {
     pagination: pagination;
   };
   totalBrands: number;
+  rating: number;
 };
 
 const AdminDashboard = (props: props) => {
@@ -56,7 +58,9 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
+                <Link
+                  href={props.linkurl ? props.linkurl : "/admin/phone/create"}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -106,7 +110,9 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
+                <Link
+                  href={props.linkurl ? props.linkurl : "/admin/phone/create"}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -156,7 +162,9 @@ const AdminDashboard = (props: props) => {
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
               {props.item}{" "}
               {props.link ? (
-                <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
+                <Link
+                  href={props.linkurl ? props.linkurl : "/admin/phone/create"}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -205,7 +213,9 @@ const AdminDashboard = (props: props) => {
           <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-gray-900">
             {props.item}{" "}
             {props.link ? (
-              <Link href={props.linkurl ? props.linkurl : "/admin/phone/create"}>
+              <Link
+                href={props.linkurl ? props.linkurl : "/admin/phone/create"}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -249,6 +259,15 @@ const AdminDashboard = (props: props) => {
           text="Create a Phone"
           link
           linkurl="/admin/manage-brand"
+        />
+      </div>
+      <div className="my-16 mx-16 flex items-center gap-4 bg-slate-50 rounded-md p-8 text-2xl">
+        Rating: {props.rating}
+        <Rating
+          initialValue={props.rating}
+          readonly
+          SVGclassName="inline-block"
+          emptyClassName="flex"
         />
       </div>
       <div className="my-16 mx-16">
@@ -296,7 +315,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-
   const res = await fetch(process.env.API_IMAGE_URL + "/graphql", {
     method: "POST",
     body: JSON.stringify({
@@ -316,9 +334,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       Authorization: "Bearer " + process.env.API_TOKEN,
     },
   });
-
   const { data } = await res.json();
-
   const contectForm = async () => {
     const response = await fetch(process.env.API_IMAGE_URL + "/graphql", {
       method: "POST",
@@ -350,10 +366,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         Authorization: "Bearer " + process.env.API_TOKEN,
       },
     });
-
     const { data } = await response.json();
     const { contactForms } = data;
-
     const aLLContactForms: {
       id: number;
       name: string;
@@ -367,25 +381,33 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         details: contactForm.attributes.details,
       };
     });
-
     const pagination: pagination = contactForms.meta.pagination;
-
     return {
       aLLContactForms,
       pagination,
     };
   };
-
+  const RatingData = async () => {
+    const response = await fetch(process.env.API_URL + "/rating", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    });
+    const { data } = await response.json();
+    return data.attributes.rating;
+  };
   const brand = new AdminBrand();
   const brandData = await brand.getBrandsNameAndDate();
-
   const contact = await contectForm();
-
+  const rating = await RatingData();
   return {
     props: {
       data: data.phones.meta.pagination.total,
       contact: contact,
       totalBrands: brandData.meta.pagination.total,
+      rating,
     },
   };
 };

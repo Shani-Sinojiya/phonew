@@ -1,4 +1,4 @@
-import React, { SVGProps, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "react-simple-star-rating";
 
@@ -7,8 +7,37 @@ const Footer = () => {
     (state: { rating: { rating: number } }) => state.rating
   );
   const dispatch = useDispatch();
+  const [serverRating, setServerRating] = useState(0);
+
+  const SeraverSetRating = async (rate: number) => {
+    const response = await fetch(process.env.API_URL + "/rating", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+      body: JSON.stringify({
+        data: {
+          rating: (rate + serverRating) / 2,
+        },
+      }),
+    });
+    const data = await response.json();
+  };
 
   useEffect(() => {
+    const fetchFromServer = async () => {
+      const response = await fetch(process.env.API_URL + "/rating", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+      });
+      const { data } = await response.json();
+      setServerRating(data.attributes.rating);
+    };
+    fetchFromServer();
     dispatch({ type: "SET_RATING_FROM_LOCAL_STORAGE" });
   }, []);
 
@@ -26,6 +55,7 @@ const Footer = () => {
             onClick={(rate) => {
               if (localStorage.getItem("rating") === null) {
                 dispatch({ type: "SET_RATING", payload: rate });
+                SeraverSetRating(rate);
               }
             }}
             size={34}
