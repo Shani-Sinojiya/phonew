@@ -1,3 +1,5 @@
+import { Phones } from "./Phones.type";
+
 type data = {
   id: number;
   attributes: {
@@ -21,12 +23,51 @@ type ServerBrand = {
   };
 };
 
-type Brand = {};
+type Brand = {
+  id: number;
+  attributes: {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    phones: {};
+  };
+};
+
+type image = {
+  id: number;
+  url: string;
+  attributes: {
+    formats: {
+      large: {
+        url: string;
+      };
+      small: {
+        url: string;
+      };
+      medium: {
+        url: string;
+      };
+      thumbnail: {
+        url: string;
+      };
+    };
+  };
+};
 
 type BrandStateDataProps = {
   id: number;
   name: string;
   createdAt: string;
+};
+
+type brandData = {
+  id: number;
+  attributes: {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    phones: { data: Phones[] | [] };
+  };
 };
 
 type BrandProps = {
@@ -43,4 +84,5 @@ export type {
   pagination,
   BrandStateDataProps,
   data,
+  brandData,
 };

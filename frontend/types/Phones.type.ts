@@ -75,8 +75,8 @@ type attributes = {
   price: number;
   buyatamazon: string;
   buyatflipkart: string;
-  hardwareRAM: string;
-  hardwareROM: string;
+  RAM: string[];
+  ROM: string[];
 };
 
 type Phones = {
@@ -97,8 +97,8 @@ type display = {
 type hardware = {
   processor: string;
   processorName: string;
-  RAM: string;
-  ROM: string;
+  RAM: string[];
+  ROM: string[];
 };
 
 type camera = {

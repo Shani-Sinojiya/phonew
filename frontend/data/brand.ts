@@ -1,4 +1,4 @@
-import type { data, ServerBrand } from "@/types/Brand.types";
+import type { brandData, data, ServerBrand } from "@/types/Brand.types";
 
 class Brand {
   protected ApiUrl = process.env.API_URL + "/brands";
@@ -9,13 +9,28 @@ class Brand {
     Authorization: this.ApiToken,
   };
 
-  async getBrandsWithOutPopulate() {
+  protected async getBrandsWithOutPopulate() {
     const response = await fetch(this.ApiUrl, {
       method: "GET",
       headers: this.ApiHeader,
     });
     const { data, meta } = await response.json();
     return { data, meta };
+  }
+
+  public async getBrandsName() {
+    const brands: ServerBrand = await this.getBrandsWithOutPopulate();
+    const data = this.toNameMany(brands.data);
+    return { data, meta: brands.meta };
+  }
+
+  public toNameMany(data: data[]) {
+    return data.map((b) => {
+      return {
+        id: b.id,
+        name: b.attributes.name,
+      };
+    });
   }
 }
 

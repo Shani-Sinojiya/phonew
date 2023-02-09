@@ -24,6 +24,7 @@ const Home = (props: props) => {
           romFilter: string[];
           processorFilter: string[];
           cameraFilter: string[];
+          networkFilter: string[];
           url: string;
         };
       }) => state.filter

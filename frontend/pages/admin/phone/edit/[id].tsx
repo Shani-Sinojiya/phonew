@@ -863,7 +863,7 @@ const PhonesInOne = (props: props) => {
             </div>
             <TextInput
               id="Rear"
-              type={"text"}
+              type={""}
               value={Rear}
               placeholder={"12x12x12MP (Telephoto - Wide angle - Ultra micro)"}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>

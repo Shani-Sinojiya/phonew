@@ -20,6 +20,7 @@ type phoneMetadata = {
 
 type FullPhoneImage = {
   id: number;
+  url: string;
   attributes: {
     formats: {
       large: {

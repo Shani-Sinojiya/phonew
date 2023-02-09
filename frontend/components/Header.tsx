@@ -4,7 +4,9 @@ import {
   removeFilterProcessor,
   removeFilterRam,
   removeFilterRom,
+  removeFilterNetwork,
   setFilterCamera,
+  setFilterNetwork,
   setFilterProcessor,
   setFilterRam,
   setFilterRom,
@@ -13,9 +15,20 @@ import {
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { StrictMode, useEffect, useState } from "react";
+import {
+  Fragment,
+  StrictMode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { classNames } from "@/lib";
+import { RootState } from "@/redux/rootReducer";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
+import { Brand } from "@/data";
+import { Transition } from "@headlessui/react";
 
 const Header = () => {
   const NavBarForHeader = () => {
@@ -148,34 +161,32 @@ const Header = () => {
   };
 
   const FilterSection = () => {
-    const [showBrand, setShowBrand] = useState<boolean>(false);
-    const [showPricing, setShowPricing] = useState<boolean>(false);
-    const [showFeatures, setShowFeatures] = useState<boolean>(false);
+    const { ShowBrandMenu, ShowPriceMenu, ShowFilterMenu } = useSelector(
+      (state: RootState) => state.ShowMenu
+    );
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const Ram: string[] = ["3GB", "4GB", "6GB", "8GB", "12GB"];
     const Rom: string[] = ["64GB", "128GB", "256GB", "512GB", "1TB"];
-    const Battery: string[] = ["2000mAh", "3000mAh", "4000mAh", "5000mAh"];
-    const Camera: string[] = ["12MP", "20MP", "24MP", "48MP", "108MP"];
+    const Battery: string[] = ["2000", "3000", "4000", "5000"];
+    const Camera: string[] = ["12", "20", "24", "48", "108"];
     const Network: string[] = ["3G", "4G", "5G"];
     const Processor: string[] = ["Snapdragon", "Mediatek", "Apple", "Exynos"];
 
     type price = { start: number; stop?: number; above: boolean }[];
     type features = { title: string; data: string[] }[];
 
-    const Brand: string[] = [
-      "Apple",
-      "Vivo",
-      "Realme",
-      "Xiaomi",
-      "Huawei",
-      "Nokia",
-      "Samsung",
-      "Oppo",
-      "Redmi",
-      "OnePlus",
-      "Motorola",
-      "Techno",
-    ];
+    const [Brands, setBrands] = useState<string[]>([]);
+
+    useEffect(() => {
+      const BrandData = async () => {
+        const brands = new Brand();
+        const { data } = await brands.getBrandsName();
+        setBrands(data.map((brand) => brand.name));
+      };
+      BrandData();
+    }, []);
 
     const Price: price = [
       {
@@ -249,19 +260,26 @@ const Header = () => {
     const FilterFeatureList = (props: { d: string; title: string }) => {
       const { d } = props;
       const [Selected, setSelected] = useState<boolean>(false);
-
       const dispatch = useDispatch();
-      const { ramFilter, romFilter, processorFilter, cameraFilter } =
-        useSelector(
-          (state: {
-            filter: {
-              ramFilter: string[];
-              romFilter: string[];
-              processorFilter: string[];
-              cameraFilter: string[];
-            };
-          }) => state.filter
-        );
+
+      const {
+        ramFilter,
+        romFilter,
+        processorFilter,
+        cameraFilter,
+        networkFilter,
+      } = useSelector(
+        (state: {
+          filter: {
+            ramFilter: string[];
+            romFilter: string[];
+            processorFilter: string[];
+            networkFilter: string[];
+            cameraFilter: string[];
+            url: string[];
+          };
+        }) => state.filter
+      );
 
       useEffect(() => {
         switch (props.title) {
@@ -288,6 +306,13 @@ const Header = () => {
             break;
           case "Processor":
             if (processorFilter.includes(d)) {
+              setSelected(true);
+            } else {
+              setSelected(false);
+            }
+            break;
+          case "Network":
+            if (networkFilter.includes(d)) {
               setSelected(true);
             } else {
               setSelected(false);
@@ -328,6 +353,13 @@ const Header = () => {
               dispatch(removeFilterProcessor(d));
             }
             break;
+          case "Network":
+            if (Selected) {
+              dispatch(setFilterNetwork(d));
+            } else {
+              dispatch(removeFilterNetwork(d));
+            }
+            break;
           default:
             break;
         }
@@ -343,13 +375,11 @@ const Header = () => {
             setSelected(!Selected);
           }}
         >
-          {d}
+          {d} {props.title === "Camera" && "MP"}
+          {props.title === "Battery" && "mAh"}
         </li>
       );
     };
-
-    const router = useRouter();
-    const dispatch = useDispatch();
 
     return (
       <div className="relative transition-all">
@@ -358,14 +388,16 @@ const Header = () => {
             <li
               className={classNames(
                 "hover:underline cursor-pointer",
-                showBrand
+                ShowBrandMenu
                   ? "underline text-white hover:text-white/70"
                   : "text-white/70 hover:text-white"
               )}
               onClick={() => {
-                setShowBrand(!showBrand);
-                setShowPricing(false);
-                setShowFeatures(false);
+                if (ShowBrandMenu) {
+                  dispatch(ShowMenu.HideBrandMenu());
+                } else {
+                  dispatch(ShowMenu.ShowBrandMenu());
+                }
               }}
             >
               Brands
@@ -373,14 +405,16 @@ const Header = () => {
             <li
               className={classNames(
                 "hover:underline cursor-pointer",
-                showPricing
+                ShowPriceMenu
                   ? "underline text-white hover:text-white/70"
                   : "text-white/70 hover:text-white"
               )}
               onClick={() => {
-                setShowPricing(!showPricing);
-                setShowBrand(false);
-                setShowFeatures(false);
+                if (ShowPriceMenu) {
+                  dispatch(ShowMenu.HidePriceMenu());
+                } else {
+                  dispatch(ShowMenu.ShowPriceMenu());
+                }
               }}
             >
               Pricing
@@ -388,14 +422,16 @@ const Header = () => {
             <li
               className={classNames(
                 "hover:underline cursor-pointer",
-                showFeatures
+                ShowFilterMenu
                   ? "underline text-white hover:text-white/70"
                   : "text-white/70 hover:text-white"
               )}
               onClick={() => {
-                setShowFeatures(!showFeatures);
-                setShowPricing(false);
-                setShowBrand(false);
+                if (ShowFilterMenu) {
+                  dispatch(ShowMenu.HideFilterMenu());
+                } else {
+                  dispatch(ShowMenu.ShowFilterMenu());
+                }
               }}
             >
               Features
@@ -412,95 +448,120 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        {(showBrand || showPricing || showFeatures) && (
-          <div
-            className={classNames(
-              "absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-[500]",
-              showFeatures
-                ? "md:left-1/2 md:-translate-x-1/2 max-sm:w-full max-sm:border-b max-sm:border-x-0 max-sm:rounded-none"
-                : "left-1/2 -translate-x-1/2"
-            )}
-          >
-            {/* brand */}
-            {showBrand && (
-              <ul className="grid md:grid-cols-6 grid-cols-3 gap-4">
-                {Brand.map((item, index) => {
-                  return (
-                    <li className="hover:underline" key={index}>
-                      <Link href={"/brand/" + item.toLowerCase()}>{item}</Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {/* pricing */}
-            {showPricing && (
-              <ul className="grid md:grid-cols-4 grid-cols-1 gap-4">
-                {Price.map((p, index) => {
-                  if (p.above) {
-                    return (
-                      <li className="hover:underline" key={index}>
-                        <Link href={"/price?s=" + p.start + "&e=above"}>
-                          Above ₹{p.start}
-                        </Link>
-                      </li>
-                    );
-                  }
-                  return (
-                    <li className="hover:underline" key={index}>
-                      <Link href={"/price?s=" + p.start + "&e=" + p.stop}>
-                        ₹{p.start} - ₹{p?.stop}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {/* Features */}
-            {showFeatures && (
-              <ul>
-                {Features.map((Feature, index) => {
-                  return (
-                    <li className="grid grid-cols-5 mb-4" key={index}>
-                      <h3 className="text-md col-span-1">{Feature.title}:</h3>
-                      <ul className="col-span-4 flex gap-x-2">
-                        {Feature.data.map((d, index) => {
-                          return (
-                            <FilterFeatureList
-                              key={index}
-                              d={d}
-                              title={Feature.title}
-                            />
-                          );
-                        })}
-                      </ul>
-                    </li>
-                  );
-                })}
-                <li className="w-full flex justify-center items-center text-center mt-4 gap-x-4">
-                  <button
-                    className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
-                    onClick={() => {
-                      dispatch(Submit());
-                      setShowFeatures(false);
-                    }}
-                  >
-                    Search
-                  </button>
-                  <button
-                    className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
-                    onClick={() => {
-                      dispatch(Clear());
-                      setShowFeatures(false);
-                    }}
-                  >
-                    Clear
-                  </button>
+        <Transition
+          show={ShowBrandMenu}
+          appear={true}
+          as={"div"}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          className="absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-[500] left-1/2 -translate-x-1/2"
+          onClick={() => {
+            dispatch(ShowMenu.HideBrandMenu());
+          }}
+        >
+          <ul className="grid md:grid-cols-6 grid-cols-3 gap-4">
+            {Brands.map((item, index) => {
+              return (
+                <li className="hover:underline" key={index}>
+                  <Link href={"/brand/" + item}>{item}</Link>
                 </li>
-              </ul>
-            )}
-          </div>
-        )}
+              );
+            })}
+          </ul>
+        </Transition>
+        <Transition
+          show={ShowPriceMenu}
+          appear={true}
+          as={"div"}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          className="absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-[500] left-1/2 -translate-x-1/2"
+          onClick={() => {
+            dispatch(ShowMenu.HidePriceMenu());
+          }}
+        >
+          <ul className="grid md:grid-cols-4 grid-cols-1 gap-4">
+            {Price.map((p, index) => {
+              if (p.above) {
+                return (
+                  <li className="hover:underline" key={index}>
+                    <Link href={"/price?s=" + p.start + "&e=above"}>
+                      Above ₹{p.start}
+                    </Link>
+                  </li>
+                );
+              }
+              return (
+                <li className="hover:underline" key={index}>
+                  <Link href={"/price?s=" + p.start + "&e=" + p.stop}>
+                    ₹{p.start} - ₹{p?.stop}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </Transition>
+        <Transition
+          show={ShowFilterMenu}
+          appear={true}
+          as={"div"}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          className="absolute p-4 border border-filter rounded-sm font-medium font-outfit bg-white z-[500] md:left-1/2 md:-translate-x-1/2 max-sm:w-full max-sm:border-b max-sm:border-x-0 max-sm:rounded-none"
+        >
+          <ul>
+            {Features.map((Feature, index) => {
+              return (
+                <li className="grid grid-cols-5 mb-4" key={index}>
+                  <h3 className="text-md col-span-1">{Feature.title}:</h3>
+                  <ul className="col-span-4 flex gap-x-2">
+                    {Feature.data.map((d, index) => {
+                      return (
+                        <FilterFeatureList
+                          key={index}
+                          d={d}
+                          title={Feature.title}
+                        />
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
+            <li className="w-full flex justify-center items-center text-center mt-4 gap-x-4">
+              <button
+                className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
+                onClick={() => {
+                  dispatch(Submit());
+                  dispatch(ShowMenu.HideFilterMenu());
+                }}
+              >
+                Search
+              </button>
+              <button
+                className="bg-primary-0 rounded-full px-6 py-2 text-white hover:bg-primary-0/80"
+                onClick={() => {
+                  dispatch(Clear());
+                  dispatch(ShowMenu.HideFilterMenu());
+                }}
+              >
+                Clear
+              </button>
+            </li>
+          </ul>
+        </Transition>
       </div>
     );
   };

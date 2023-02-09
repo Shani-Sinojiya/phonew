@@ -1,10 +1,12 @@
 import {
   CLEAR,
   REMOVE_FILTER_CAMERA,
+  REMOVE_FILTER_NETWORK,
   REMOVE_FILTER_PROCESSOR,
   REMOVE_FILTER_RAM,
   REMOVE_FILTER_ROM,
   SET_FILTER_CAMERA,
+  SET_FILTER_NETWORK,
   SET_FILTER_PROCESSOR,
   SET_FILTER_RAM,
   SET_FILTER_ROM,
@@ -16,16 +18,18 @@ interface FilterState {
   ramFilter: string[];
   romFilter: string[];
   processorFilter: string[];
+  networkFilter: string[];
   cameraFilter: string[];
-  url: string;
+  url: string[];
 }
 
 const initialState: FilterState = {
-  ramFilter: [],
-  romFilter: [],
-  processorFilter: [],
-  cameraFilter: [],
-  url: "",
+  ramFilter: [] as string[],
+  romFilter: [] as string[],
+  processorFilter: [] as string[],
+  networkFilter: [] as string[],
+  cameraFilter: [] as string[],
+  url: [] as string[],
 };
 
 const filter = (state = initialState, action: FilterAction) => {
@@ -54,6 +58,12 @@ const filter = (state = initialState, action: FilterAction) => {
         : [...state.cameraFilter, action.payload];
       return { ...state, cameraFilter };
 
+    case SET_FILTER_NETWORK:
+      const networkFilter = state.networkFilter.includes(action.payload)
+        ? state.networkFilter.filter((item) => item !== action.payload)
+        : [...state.networkFilter, action.payload];
+      return { ...state, networkFilter };
+
     case REMOVE_FILTER_RAM:
       const removeRamFilter = state.ramFilter.filter(
         (item) => item !== action.payload
@@ -78,15 +88,20 @@ const filter = (state = initialState, action: FilterAction) => {
       );
       return { ...state, cameraFilter: removeCameraFilter };
 
+    case REMOVE_FILTER_NETWORK:
+      const removeNetworkFilter = state.networkFilter.filter(
+        (item) => item !== action.payload
+      );
+      return { ...state, networkFilter: removeNetworkFilter };
+
     case SUMBIT:
       const url: string[] = [];
-
       state.ramFilter.map((ram) => {
-        url.push("&filters[hardwareRAM][$containsi]=" + ram.toString());
+        url.push("&filters[RAM][$containsi]=" + ram.toString());
       });
 
       state.romFilter.map((rom) => {
-        url.push("&filters[hardwareROM][$containsi]=" + rom.toString());
+        url.push("&filters[ROM][$containsi]=" + rom.toString());
       });
 
       state.cameraFilter.map((cam) => {
@@ -94,10 +109,13 @@ const filter = (state = initialState, action: FilterAction) => {
       });
 
       state.processorFilter.map((pf) => {
-        url.push(
-          "&filters[hardwareprocessorname][$containsi]=" + pf.toString()
-        );
+        url.push("&filters[hardwareprocessor][$containsi]=" + pf.toString());
       });
+
+      state.networkFilter.map((nf) => {
+        url.push("&filters[network][$containsi]=" + nf.toString());
+      });
+
       const newUrl = url.join("");
       return { ...state, url: newUrl };
 

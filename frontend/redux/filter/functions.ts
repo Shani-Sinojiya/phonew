@@ -1,4 +1,5 @@
 import {
+  REMOVE_FILTER_NETWORK,
   REMOVE_FILTER_CAMERA,
   REMOVE_FILTER_PROCESSOR,
   REMOVE_FILTER_RAM,
@@ -7,8 +8,9 @@ import {
   SET_FILTER_PROCESSOR,
   SET_FILTER_RAM,
   SET_FILTER_ROM,
+  SET_FILTER_NETWORK,
   SUMBIT,
-  CLEAR
+  CLEAR,
 } from "./types";
 
 export const setFilterRam = (ram: string) => {
@@ -36,6 +38,13 @@ export const setFilterCamera = (camera: string) => {
   return {
     type: SET_FILTER_CAMERA,
     payload: camera,
+  };
+};
+
+export const setFilterNetwork = (network: string) => {
+  return {
+    type: SET_FILTER_NETWORK,
+    payload: network,
   };
 };
 
@@ -67,6 +76,13 @@ export const removeFilterCamera = (camera: string) => {
   };
 };
 
+export const removeFilterNetwork = (network: string) => {
+  return {
+    type: REMOVE_FILTER_NETWORK,
+    payload: network,
+  };
+};
+
 export const Submit = () => {
   return {
     type: SUMBIT,
@@ -79,4 +95,4 @@ export const Clear = () => {
   };
 };
 
-// Path: frontend\redux\filter\index.ts
+// Path: frontend\redux\filter\fonctions.ts

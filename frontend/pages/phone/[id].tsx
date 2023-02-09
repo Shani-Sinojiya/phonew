@@ -21,8 +21,8 @@ type display = {
 type hardware = {
   processor: string;
   processorName: string;
-  RAM: string;
-  ROM: string;
+  RAM: string[];
+  ROM: string[];
 };
 
 type camera = {
@@ -124,8 +124,14 @@ const Phone = (props: Props) => {
                     data.display.fps
                   }
                 />
-                <CardDetail title="Storage" details={data.hardware.ROM} />
-                <CardDetail title="RAM" details={data.hardware.RAM} />
+                <CardDetail
+                  title="Storage"
+                  details={data.hardware.ROM.join(" | ")}
+                />
+                <CardDetail
+                  title="RAM"
+                  details={data.hardware.RAM.join(" | ")}
+                />
                 <CardDetail
                   title="Processor"
                   details={data.hardware.processorName}
@@ -135,8 +141,9 @@ const Phone = (props: Props) => {
                   details={
                     "Front: " +
                     data.camera.front +
-                    " | Rear: " +
-                    data.camera.rear
+                    " MP | Rear: " +
+                    data.camera.rear +
+                    " MP"
                   }
                 />
                 <CardDetail title="Security" details={data.general.security} />
@@ -325,7 +332,10 @@ const Phone = (props: Props) => {
                     </span>
                     <span className="flex flex-col items-center justify-center relative">
                       <span className="text-primary-0 font-bold md:text-3xl max-md:text-2xl">
-                        ₹{data.price}
+                        ₹
+                        {new Intl.NumberFormat("en-IN", {
+                          maximumSignificantDigits: 3,
+                        }).format(data.price)}
                       </span>
                       <span className="absolute md:-bottom-1.5 max-md:-bottom-2 md:right-12 max-md:right-5 text-[#8E8E8E] md:text-sm max-md:text-xs text-right">
                         Price may vary
@@ -336,7 +346,7 @@ const Phone = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="my-8 mx-4 rounded-xl bg-[#F7F9FF]">
+          <div className="mt-8 mx-4 rounded-xl bg-[#F7F9FF]">
             <Tabs.Group aria-label="Tabs with underline" style="underline">
               <Tabs.Item title="General" active={true}>
                 <div className="flex font-outfit mx-16">
@@ -407,8 +417,8 @@ const Phone = (props: Props) => {
                       <ul className="gap-4 grid">
                         <li>{data.hardware.processor}</li>
                         <li>{data.hardware.processorName}</li>
-                        <li>{data.hardware.RAM}</li>
-                        <li>{data.hardware.ROM}</li>
+                        <li>{data.hardware.RAM.join(" | ")}</li>
+                        <li>{data.hardware.ROM.join(" | ")}</li>
                       </ul>
                     </div>
                   </div>
@@ -426,8 +436,8 @@ const Phone = (props: Props) => {
                     </div>
                     <div className="font-medium text-[#1C1C1C] col-span-3">
                       <ul className="gap-4 grid">
-                        <li>{data.camera.rear}MP</li>
-                        <li>{data.camera.front}MP</li>
+                        <li>{data.camera.rear} MP</li>
+                        <li>{data.camera.front} MP</li>
                         <li>{data.camera.number}</li>
                       </ul>
                     </div>
@@ -451,10 +461,10 @@ const Phone = (props: Props) => {
                 </div>
               </Tabs.Item>
             </Tabs.Group>
-            <span className="text-xs text-gray-400">
-              {"*"}For more specs and details visit store.
-            </span>
           </div>
+          <span className="text-xs mx-4 text-gray-400">
+            {"*"}For more specs and details visit store.
+          </span>
         </div>
       </div>
     </HeaderFooterLayout>

@@ -58,7 +58,7 @@ const Card = (props: data) => {
               title="Display"
               details={
                 props.display.size +
-                " | " +
+                " inch | " +
                 props.display.type +
                 " | " +
                 props.display.PPI +
@@ -66,8 +66,11 @@ const Card = (props: data) => {
                 props.display.fps
               }
             />
-            <CardDetail title="Storage" details={props.hardware.ROM} />
-            <CardDetail title="RAM" details={props.hardware.RAM} />
+            <CardDetail
+              title="Storage"
+              details={props.hardware.ROM.join(" | ")}
+            />
+            <CardDetail title="RAM" details={props.hardware.RAM.join(" | ")} />
             <CardDetail
               title="Processor"
               details={props.hardware.processorName}
@@ -75,7 +78,7 @@ const Card = (props: data) => {
             <CardDetail
               title="Camera"
               details={
-                "Front: " + props.camera.front + " | Rear: " + props.camera.rear
+                "Front: " + props.camera.front + " MP | Rear: " + props.camera.rear + " MP"
               }
             />
             <CardDetail title="Security" details={props.general.security} />
@@ -264,7 +267,10 @@ const Card = (props: data) => {
                 </span>
                 <span className="flex flex-col items-center justify-center relative">
                   <span className="text-primary-0 font-bold md:text-3xl max-md:text-2xl">
-                    ₹{props.price}
+                    ₹
+                    {new Intl.NumberFormat("en-IN", {
+                      maximumSignificantDigits: 3,
+                    }).format(props.price)}
                   </span>
                   <span className="absolute md:-bottom-1.5 max-md:-bottom-2 md:right-12 max-md:right-5 text-[#8E8E8E] md:text-sm max-md:text-xs text-right">
                     Price may vary

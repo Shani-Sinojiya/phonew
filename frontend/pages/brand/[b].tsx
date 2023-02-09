@@ -2,21 +2,22 @@ import { HeaderFooterLayout } from "@/layouts";
 import { data, pagination } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { useSelector } from "react-redux";
+import { GetServerSideProps } from "next";
 
 const Phone = new phone();
 
 const Brand = () => {
   const [Data, setData] = useState<data[]>([]);
   const [Pagination, setPagination] = useState<pagination>({
-    page: 1,
-    pageCount: 999999999999999999999,
-    total: 2222222222222222222222222222,
-    pageSize: 54515,
+    page: 0,
+    pageCount: 0,
+    pageSize: 0,
+    total: 0,
   });
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [filterUrl, setFilterUrl] = useState<string>("");
@@ -44,7 +45,7 @@ const Brand = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=*&filters[brand][name][$contains]=${Router.query.b}` +
           filterUrl;
         const res = await Phone.getPhones(url);
         const { data, meta } = res;
@@ -60,7 +61,7 @@ const Brand = () => {
     const DisplayNew = async () => {
       const url =
         process.env.API_URL +
-        `/phones?populate=image&filters[name][$containsi]=${Router.query.q}`;
+        `/phones?populate=*&filters[brand][name][$contains]=${Router.query.b}`;
       const res = await Phone.getPhones(url);
       const { data, meta } = res;
       const allData = Phone.toNormalFormatArray(data);
@@ -69,7 +70,7 @@ const Brand = () => {
     };
 
     DisplayNew();
-  }, [Router.query.q]);
+  }, [Router.query.b]);
 
   const fetchData = async () => {
     if (Pagination.page === Pagination.pageCount) {
@@ -78,7 +79,7 @@ const Brand = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=*&filters[brand][name][$contains]=${Router.query.b}` +
           filterUrl +
           `&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
@@ -89,8 +90,8 @@ const Brand = () => {
       } else {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${
-            Router.query.q
+          `/phones?populate=*&filters[brand][name][$contains]=${
+            Router.query.b
           }&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
         const { data, meta } = res;
@@ -102,17 +103,17 @@ const Brand = () => {
   };
 
   return (
-    <HeaderFooterLayout pageTitle={Router.query.q + " - Search"}>
+    <HeaderFooterLayout pageTitle={Router.query.b + " - Brand"}>
       {Pagination.pageCount === 0 ? (
         <div className="flex justify-center items-center h-screen">
           <h1 className="text-2xl font-bold">No Results Found</h1>
         </div>
       ) : (
-        <>
+        <Fragment>
           <h2 className="w-full bg-[#F8F8F8] pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
             <span className="col-span-2"></span>
             <span className="col-span-10">
-              Search: <span className="text-filter">{Router.query.q}</span>
+              Search: <span className="text-filter">{Router.query.b}</span>
             </span>
           </h2>
           <InfiniteScroll
@@ -130,10 +131,26 @@ const Brand = () => {
               <Card key={data.id} {...data} />
             ))}
           </InfiniteScroll>
-        </>
+        </Fragment>
       )}
     </HeaderFooterLayout>
   );
 };
 
 export default Brand;
+
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const res = await Phone.getPhones(
+//     process.env.API_URL +
+//       `/phones?populate=*&filters[brand][name][$contains]=${ctx.query.b}`
+//   );
+//   const { data, meta } = res;
+//   const allData = Phone.toNormalFormatArray(data);
+
+//   return {
+//     props: {
+//       data: allData,
+//       pagination: meta.pagination,
+//     },
+//   };
+// };

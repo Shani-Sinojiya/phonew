@@ -1,7 +1,15 @@
 import { HeaderFooterLayout } from "@/layouts";
+import { RootState } from "@/redux/rootReducer";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 
 const About = () => {
+  const Dispatch = useDispatch();
+  const { ShowPriceMenu, ShowBrandMenu, ShowFilterMenu } = useSelector(
+    (state: RootState) => state.ShowMenu
+  );
+
   return (
     <HeaderFooterLayout pageTitle="About us">
       <div className="grid px-16 py-8 bg-[#F8F8F8] gap-y-8">
@@ -59,7 +67,8 @@ const About = () => {
               <button
                 className="border-[#FF6767] border-2 transition-colors ease-in-out bg-white hover:bg-[#FF6767] hover:text-white text-[#FF6767] font-outfit font-semibold text-lg px-8 py-2 rounded-full mt-10"
                 onClick={() => {
-                  Router.push("/");
+                  document.querySelector("nav")?.scrollIntoView();
+                  Dispatch(ShowMenu.ShowBrandMenu());
                 }}
               >
                 Explore now
@@ -98,7 +107,8 @@ const About = () => {
               <button
                 className="border-[#E456F0] border-2 transition-colors ease-in-out bg-white hover:bg-[#E456F0] hover:text-white text-[#E456F0] font-outfit font-semibold text-lg px-8 py-2 rounded-full mt-10"
                 onClick={() => {
-                  Router.push("/");
+                  document.querySelector("nav")?.scrollIntoView();
+                  Dispatch(ShowMenu.ShowPriceMenu());
                 }}
               >
                 Explore now
@@ -138,7 +148,8 @@ const About = () => {
               <button
                 className="border-[#6EC160] border-2 transition-colors ease-in-out bg-white hover:bg-[#6EC160] hover:text-white text-[#6EC160] font-outfit font-semibold text-lg px-8 py-2 rounded-full mt-10 md:mb-10"
                 onClick={() => {
-                  Router.push("/");
+                  document.querySelector("nav")?.scrollIntoView();
+                  Dispatch(ShowMenu.ShowFilterMenu());
                 }}
               >
                 Explore now

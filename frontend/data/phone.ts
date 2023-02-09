@@ -23,8 +23,8 @@ class phone {
       hardware: {
         processor: data.attributes.hardwareprocessor,
         processorName: data.attributes.hardwareprocessorname,
-        RAM: data.attributes.hardwareRAM,
-        ROM: data.attributes.hardwareROM,
+        RAM: data.attributes.RAM,
+        ROM: data.attributes.ROM,
       },
       camera: {
         rear: data.attributes.camerarear,

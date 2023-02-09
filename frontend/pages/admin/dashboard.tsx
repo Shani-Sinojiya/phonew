@@ -377,7 +377,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 
   const brand = new AdminBrand();
-  const brandData = await brand.getBrandsWithOutPopulate();
+  const brandData = await brand.getBrandsNameAndDate();
 
   const contact = await contectForm();
 
