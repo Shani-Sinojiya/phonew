@@ -27,9 +27,6 @@
     "fastcharging": {
       "type": "boolean"
     },
-    "colours": {
-      "type": "string"
-    },
     "DisplayRefreshRate": {
       "type": "string"
     },
@@ -99,6 +96,9 @@
       "type": "json"
     },
     "security": {
+      "type": "json"
+    },
+    "colours": {
       "type": "json"
     }
   }

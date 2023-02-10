@@ -24,11 +24,11 @@ const AdminHeader = () => {
   ];
   return (
     <Navbar fluid={true} rounded={true}>
-      <Navbar.Brand to="/admin/dashboard">
-        <Link href={"/admin/dashboard"} className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
+      <Link href={"/admin/dashboard"} className="flex items-center">
+        <span className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
           Phonew
-        </Link>
-      </Navbar.Brand>
+        </span>
+      </Link>
       <Navbar.Toggle color="gray" />
       <Navbar.Collapse className="mr-16 max-md:mr-0">
         {navLinks.map((link, index) => (
@@ -44,12 +44,12 @@ const AdminHeader = () => {
             {link.name}
           </Link>
         ))}
-        <a
+        <button
           className="block py-2 pl-3 pr-4 cursor-pointer text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
           onClick={() => signOut()}
         >
           Logout
-        </a>
+        </button>
       </Navbar.Collapse>
     </Navbar>
   );

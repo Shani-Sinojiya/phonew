@@ -39,7 +39,7 @@ const Home = (props: props) => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=release:desc${filterUrl}`;
+            `/phones?populate=image,brand&sort[0]=createdAt:desc${filterUrl}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
           const allData = Phone.toNormalFormatArray(data);
@@ -57,7 +57,7 @@ const Home = (props: props) => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=release:desc${filterUrl}` +
+            `/phones?populate=image,brand&sort[0]=createdAt:desc${filterUrl}` +
             `&pagination[page]=${Pagination.page + 1}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
@@ -67,7 +67,7 @@ const Home = (props: props) => {
         } else {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=release:desc` +
+            `/phones?populate=image,brand&sort[0]=createdAt:desc` +
             `&pagination[page]=${Pagination.page + 1}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
@@ -106,7 +106,7 @@ const Home = (props: props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const response = await Phone.getPhones(
-    process.env.API_URL + "/phones?populate=image,brand&sort[0]=release:desc"
+    process.env.API_URL + "/phones?populate=image,brand&sort[0]=createdAt:desc"
   );
   const { data, meta } = await response;
   const allData = Phone.toNormalFormatArray(data);

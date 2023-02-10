@@ -371,7 +371,6 @@ const PhoneCreate = () => {
               <Label htmlFor={"Security"} value={"Security"} />
             </div>
             <Select
-              value={Security}
               onChange={(e) => {
                 const value = e.target.value;
                 const index = securityArray.indexOf(value);
@@ -402,6 +401,71 @@ const PhoneCreate = () => {
                       onClick={() => {
                         setSecurity(Security.filter((R) => R !== N));
                         setSecurityArray([...securityArray, N]);
+                      }}
+                      title={`remove ${N}`}
+                    >
+                      <XMarkIcon aria-hidden="true" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      const ColorSection = () => {
+        const { Color, setColor } = useContext(CreatePhoneContext);
+        const [ColorArray, setColorArray] = useState<string[]>([
+          "White",
+          "Black",
+          "Gray",
+          "Silver",
+          "Gold",
+          "Blue",
+          "Red",
+          "Purple",
+          "Yellow",
+          "Orange",
+          "Green",
+          "Pink",
+        ]);
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"Color"} value={"Color"} />
+            </div>
+            <Select
+              onChange={(e) => {
+                const value = e.target.value;
+                const index = ColorArray.indexOf(value);
+                const s = Color;
+                ColorArray.splice(index, 1);
+                setColorArray([...ColorArray]);
+                s.push(value);
+                setColor(s);
+              }}
+            >
+              <option>Add Color</option>
+              {ColorArray.map((color) => (
+                <option value={color} key={color}>
+                  {color}
+                </option>
+              ))}
+            </Select>
+            <div>
+              {Color?.map((N) => (
+                <div
+                  className="flex items-center mt-2 bg-slate-50 hover:bg-slate-100 py-2 px-3 rounded justify-between"
+                  key={N}
+                >
+                  <div className="text-sm">{N}</div>
+                  <div className="text-sm">
+                    <button
+                      className="text-red-500"
+                      onClick={() => {
+                        setColor(Color.filter((R) => R !== N));
+                        setColorArray([...ColorArray, N]);
                       }}
                       title={`remove ${N}`}
                     >
@@ -546,20 +610,7 @@ const PhoneCreate = () => {
               </button>
             </div>
           </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"Color"} value={"Color"} />
-            </div>
-            <TextInput
-              id="Color"
-              type={"text"}
-              placeholder="Black"
-              value={Color}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setColor(e.target.value)
-              }
-            />
-          </div>
+          <ColorSection />
           <Securitysection />
           <div className="mb-2">
             <div className="mb-2 block">
@@ -978,8 +1029,9 @@ const PhoneCreate = () => {
                   className="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   onChange={(e) => setOS(e.target.value)}
                 >
-                  <option selected>iOS</option>
-                  <option>Android</option>
+                  <option>Add OS type</option>
+                  <option value={"iOS"}>iOS</option>
+                  <option value={"Android"}>Android</option>
                 </select>
               </div>
             </div>

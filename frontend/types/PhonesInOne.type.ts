@@ -28,7 +28,7 @@ type general = {
   battery: number;
   weight: number;
   IPrating: string;
-  colours: string;
+  colours: string[];
   fastcharging: boolean;
   security: string[];
   release: string;

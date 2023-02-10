@@ -428,6 +428,80 @@ const PhonesInOne = (props: props) => {
         );
       };
 
+      const ColorSection = () => {
+        const { Color, setColor } = useContext(PhoneContext);
+        const [ColorArray, setColorArray] = useState<string[]>([
+          "White",
+          "Black",
+          "Gray",
+          "Silver",
+          "Gold",
+          "Blue",
+          "Red",
+          "Purple",
+          "Yellow",
+          "Orange",
+          "Green",
+          "Pink",
+        ]);
+
+        useEffect(() => {
+          for (let i = 0; i < Color?.length; i++) {
+            const index = ColorArray.indexOf(Color[i]);
+            ColorArray.splice(index, 1);
+          }
+          setColorArray([...ColorArray]);
+        }, [Color]);
+
+        return (
+          <div className="mb-2">
+            <div className="mb-2 block">
+              <Label htmlFor={"Color"} value={"Color"} />
+            </div>
+            <Select
+              onChange={(e) => {
+                const value = e.target.value;
+                const index = ColorArray.indexOf(value);
+                ColorArray.splice(index, 1);
+                setColorArray([...ColorArray]);
+                const a = Color;
+                a.push(value);
+                setColor(a);
+              }}
+            >
+              <option>Add Color</option>
+              {ColorArray.map((color) => (
+                <option value={color} key={color}>
+                  {color}
+                </option>
+              ))}
+            </Select>
+            <div>
+              {(Color as string[]).map((N) => (
+                <div
+                  className="flex items-center mt-2 bg-slate-50 hover:bg-slate-100 py-2 px-3 rounded justify-between"
+                  key={N}
+                >
+                  <div className="text-sm">{N}</div>
+                  <div className="text-sm">
+                    <button
+                      className="text-red-500"
+                      onClick={() => {
+                        setColor(Color.filter((R) => R !== N));
+                        setColorArray([...ColorArray, N]);
+                      }}
+                      title={`remove ${N}`}
+                    >
+                      <XMarkIcon aria-hidden="true" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
       return (
         <div className="max-w-xl my-4">
           <div className="mb-2">
@@ -559,20 +633,7 @@ const PhonesInOne = (props: props) => {
               </button>
             </div>
           </div>
-          <div className="mb-2">
-            <div className="mb-2 block">
-              <Label htmlFor={"Color"} value={"Color"} />
-            </div>
-            <TextInput
-              id="Color"
-              type={"text"}
-              placeholder="Black"
-              value={Color}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setColor(e.target.value)
-              }
-            />
-          </div>
+          <ColorSection />
           <Securitysection />
           <div className="mb-2">
             <div className="mb-2 block">
@@ -988,8 +1049,9 @@ const PhonesInOne = (props: props) => {
                   className="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   onChange={(e) => setOS(e.target.value)}
                 >
-                  <option selected>iOS</option>
-                  <option>Android</option>
+                  <option>Add OS type</option>
+                  <option value={"iOS"}>iOS</option>
+                  <option value={"Android"}>Android</option>
                 </select>
               </div>
             </div>
@@ -1218,7 +1280,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       battery: data.attributes.battery,
       weight: data.attributes.weight,
       IPrating: data.attributes.IPrating,
-      colours: data.attributes.colours,
+      colours: data.attributes.colours === null ? [] : data.attributes.colours,
       fastcharging: data.attributes.fastcharging,
       security:
         data.attributes.security === null ? [] : data.attributes.security,

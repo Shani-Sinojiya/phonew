@@ -11,18 +11,13 @@ import {
   setFilterRam,
   setFilterRom,
   Submit,
+  removeFilterBattery,
+  setFilterBattery,
 } from "@/redux/filter/functions";
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  Fragment,
-  StrictMode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { memo, StrictMode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { classNames } from "@/lib";
 import { RootState } from "@/redux/rootReducer";
@@ -30,7 +25,7 @@ import { ShowMenu } from "@/redux/ShowMenu/functions";
 import { Brand } from "@/data";
 import { Transition } from "@headlessui/react";
 
-const Header = () => {
+const HeaderComponent = () => {
   const NavBarForHeader = () => {
     const router = useRouter();
     const navLinks = [
@@ -188,6 +183,123 @@ const Header = () => {
       BrandData();
     }, []);
 
+    const FilterFeatureList = (props: { d: string; title: string }) => {
+      const { d } = props;
+      const [Selected, setSelected] = useState<boolean>(false);
+      const dispatch = useDispatch();
+
+      const {
+        ramFilter,
+        romFilter,
+        processorFilter,
+        cameraFilter,
+        networkFilter,
+        betteryFilter,
+      } = useSelector(
+        (state: {
+          filter: {
+            ramFilter: string[];
+            romFilter: string[];
+            processorFilter: string[];
+            networkFilter: string[];
+            cameraFilter: string[];
+            betteryFilter: string[];
+            url: string[];
+          };
+        }) => state.filter
+      );
+
+      useEffect(() => {
+        if (props.title == "RAM") {
+          if (ramFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else if (props.title == "ROM") {
+          if (romFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else if (props.title == "Camera") {
+          if (cameraFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else if (props.title == "Processor") {
+          if (processorFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else if (props.title == "Network") {
+          if (networkFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else if (props.title == "Battery") {
+          if (betteryFilter.includes(d)) {
+            setSelected(true);
+          } else {
+            setSelected(false);
+          }
+        } else {
+          setSelected(false);
+        }
+      }, []);
+
+      useEffect(() => {
+        if (Selected) {
+          if (props.title == "RAM") {
+            dispatch(setFilterRam(d));
+          } else if (props.title == "ROM") {
+            dispatch(setFilterRom(d));
+          } else if (props.title == "Camera") {
+            dispatch(setFilterCamera(d));
+          } else if (props.title == "Processor") {
+            dispatch(setFilterProcessor(d));
+          } else if (props.title == "Network") {
+            dispatch(setFilterNetwork(d));
+          } else if (props.title == "Battery") {
+            dispatch(setFilterBattery(d));
+          }
+        } else {
+          if (props.title == "RAM") {
+            dispatch(removeFilterRam(d));
+          } else if (props.title == "ROM") {
+            dispatch(removeFilterRom(d));
+          } else if (props.title == "Camera") {
+            dispatch(removeFilterCamera(d));
+          } else if (props.title == "Processor") {
+            dispatch(removeFilterProcessor(d));
+          } else if (props.title == "Network") {
+            dispatch(removeFilterNetwork(d));
+          } else if (props.title == "Battery") {
+            dispatch(removeFilterBattery(d));
+          }
+        }
+      }, [Selected]);
+
+      return (
+        <li
+          className={classNames(
+            "rounded-full px-3 cursor-pointer text-sm py-1",
+            Selected ? "bg-[#EDF1FF] border border-primary-0" : "bg-gray-200"
+          )}
+          onClick={() => {
+            setSelected(!Selected);
+          }}
+        >
+          {d}
+          {props.title === "Camera" && "MP"}
+          {props.title === "Battery" && "mAh"}
+        </li>
+      );
+    };
+
     const Price: price = [
       {
         start: 1000,
@@ -256,130 +368,6 @@ const Header = () => {
         data: Processor,
       },
     ];
-
-    const FilterFeatureList = (props: { d: string; title: string }) => {
-      const { d } = props;
-      const [Selected, setSelected] = useState<boolean>(false);
-      const dispatch = useDispatch();
-
-      const {
-        ramFilter,
-        romFilter,
-        processorFilter,
-        cameraFilter,
-        networkFilter,
-      } = useSelector(
-        (state: {
-          filter: {
-            ramFilter: string[];
-            romFilter: string[];
-            processorFilter: string[];
-            networkFilter: string[];
-            cameraFilter: string[];
-            url: string[];
-          };
-        }) => state.filter
-      );
-
-      useEffect(() => {
-        switch (props.title) {
-          case "RAM":
-            if (ramFilter.includes(d)) {
-              setSelected(true);
-            } else {
-              setSelected(false);
-            }
-            break;
-          case "ROM":
-            if (romFilter.includes(d)) {
-              setSelected(true);
-            } else {
-              setSelected(false);
-            }
-            break;
-          case "Camera":
-            if (cameraFilter.includes(d)) {
-              setSelected(true);
-            } else {
-              setSelected(false);
-            }
-            break;
-          case "Processor":
-            if (processorFilter.includes(d)) {
-              setSelected(true);
-            } else {
-              setSelected(false);
-            }
-            break;
-          case "Network":
-            if (networkFilter.includes(d)) {
-              setSelected(true);
-            } else {
-              setSelected(false);
-            }
-            break;
-          default:
-            break;
-        }
-      }, []);
-
-      useEffect(() => {
-        switch (props.title) {
-          case "RAM":
-            if (Selected) {
-              dispatch(setFilterRam(d));
-            } else {
-              dispatch(removeFilterRam(d));
-            }
-            break;
-          case "ROM":
-            if (Selected) {
-              dispatch(setFilterRom(d));
-            } else {
-              dispatch(removeFilterRom(d));
-            }
-            break;
-          case "Camera":
-            if (Selected) {
-              dispatch(setFilterCamera(d));
-            } else {
-              dispatch(removeFilterCamera(d));
-            }
-            break;
-          case "Processor":
-            if (Selected) {
-              dispatch(setFilterProcessor(d));
-            } else {
-              dispatch(removeFilterProcessor(d));
-            }
-            break;
-          case "Network":
-            if (Selected) {
-              dispatch(setFilterNetwork(d));
-            } else {
-              dispatch(removeFilterNetwork(d));
-            }
-            break;
-          default:
-            break;
-        }
-      }, [Selected]);
-
-      return (
-        <li
-          className={classNames(
-            "rounded-full px-3 cursor-pointer text-sm py-1",
-            Selected ? "bg-[#EDF1FF] border border-primary-0" : "bg-gray-200"
-          )}
-          onClick={() => {
-            setSelected(!Selected);
-          }}
-        >
-          {d} {props.title === "Camera" && "MP"}
-          {props.title === "Battery" && "mAh"}
-        </li>
-      );
-    };
 
     return (
       <div className="relative transition-all">
@@ -573,5 +561,7 @@ const Header = () => {
     </StrictMode>
   );
 };
+
+const Header = memo(HeaderComponent);
 
 export default Header;

@@ -20,7 +20,10 @@ type props = {
     pagination: pagination;
   };
   totalBrands: number;
-  rating: number;
+  rating: {
+    rating: number;
+    rating_counter: number;
+  };
 };
 
 const AdminDashboard = (props: props) => {
@@ -262,17 +265,19 @@ const AdminDashboard = (props: props) => {
         />
       </div>
       <div className="my-16 mx-16 flex items-center gap-4 bg-slate-50 rounded-md p-8 text-2xl">
-        Rating: {props.rating !== null ? props.rating : 0}
+        Rating: {props.rating.rating !== null ? props.rating.rating : 0}
         <Rating
-          initialValue={props.rating !== null ? props.rating : 0}
+          initialValue={props.rating.rating !== null ? props.rating.rating : 0}
           readonly
           SVGclassName="inline-block"
+          disableFillHover
           emptyClassName="flex"
         />
+        Rating Count: {props.rating.rating_counter}
       </div>
       <div className="my-16 mx-16">
         <h1 className="text-2xl font-semibold text-gray-900">Contact Forms</h1>
-        <div className="relative shadow-md sm:rounded-lg mt-4">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
@@ -340,7 +345,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       method: "POST",
       body: JSON.stringify({
         query: `query {
-        contactForms(pagination: {pageSize: 25}) {
+        contactForms(
+          sort: "id:desc" 
+          pagination: {pageSize: 25}
+          ) {
             data {
                 id 
                 attributes {
@@ -398,9 +406,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { data } = await response.json();
 
     if (data === null) {
-      return 0;
+      return {
+        rating: 0,
+        rating_counter: 0,
+      };
     } else {
-      return data.attributes.rating;
+      return {
+        rating: data.attributes.rating,
+        rating_counter: data.attributes.rating_counter,
+      };
     }
   };
   const brand = new AdminBrand();

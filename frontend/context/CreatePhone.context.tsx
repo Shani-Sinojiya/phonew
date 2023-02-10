@@ -59,8 +59,8 @@ interface CreatePhoneContextData {
   setIPRating: (IPRating: string) => void;
   FastCharing: boolean | undefined;
   setFastCharing: (FastCharing: boolean) => void;
-  Color: string | undefined;
-  setColor: (Color: string) => void;
+  Color: string[];
+  setColor: (Color: string[]) => void;
   Security: string[];
   setSecurity: (Security: string[]) => void;
   Battery: string | undefined;

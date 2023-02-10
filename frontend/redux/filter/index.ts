@@ -1,10 +1,12 @@
 import {
   CLEAR,
+  REMOVE_FILTER_BETTERY,
   REMOVE_FILTER_CAMERA,
   REMOVE_FILTER_NETWORK,
   REMOVE_FILTER_PROCESSOR,
   REMOVE_FILTER_RAM,
   REMOVE_FILTER_ROM,
+  SET_FILTER_BETTERY,
   SET_FILTER_CAMERA,
   SET_FILTER_NETWORK,
   SET_FILTER_PROCESSOR,
@@ -14,25 +16,27 @@ import {
 } from "./types";
 import type { FilterAction } from "./types";
 
-interface FilterState {
+type FilterState = {
   ramFilter: string[];
   romFilter: string[];
   processorFilter: string[];
   networkFilter: string[];
   cameraFilter: string[];
+  betteryFilter: string[];
   url: string[];
-}
-
-const initialState: FilterState = {
-  ramFilter: [] as string[],
-  romFilter: [] as string[],
-  processorFilter: [] as string[],
-  networkFilter: [] as string[],
-  cameraFilter: [] as string[],
-  url: [] as string[],
 };
 
-const filter = (state = initialState, action: FilterAction) => {
+const initialState: FilterState = {
+  ramFilter: [],
+  romFilter: [],
+  processorFilter: [],
+  networkFilter: [],
+  cameraFilter: [],
+  betteryFilter: [],
+  url: [],
+};
+
+function filter(state = initialState, action: FilterAction) {
   switch (action.type) {
     case SET_FILTER_RAM:
       const ramFilter = state.ramFilter.includes(action.payload)
@@ -64,6 +68,12 @@ const filter = (state = initialState, action: FilterAction) => {
         : [...state.networkFilter, action.payload];
       return { ...state, networkFilter };
 
+    case SET_FILTER_BETTERY:
+      const betteryFilter = state.betteryFilter.includes(action.payload)
+        ? state.betteryFilter.filter((item) => item !== action.payload)
+        : [...state.betteryFilter, action.payload];
+      return { ...state, betteryFilter };
+
     case REMOVE_FILTER_RAM:
       const removeRamFilter = state.ramFilter.filter(
         (item) => item !== action.payload
@@ -94,6 +104,12 @@ const filter = (state = initialState, action: FilterAction) => {
       );
       return { ...state, networkFilter: removeNetworkFilter };
 
+    case REMOVE_FILTER_BETTERY:
+      const removeBetteryFilter = state.betteryFilter.filter(
+        (item) => item !== action.payload
+      );
+      return { ...state, betteryFilter: removeBetteryFilter };
+
     case SUMBIT:
       const url: string[] = [];
       state.ramFilter.map((ram) => {
@@ -116,6 +132,10 @@ const filter = (state = initialState, action: FilterAction) => {
         url.push("&filters[network][$containsi]=" + nf.toString());
       });
 
+      state.betteryFilter.map((bf) => {
+        url.push("&filters[battery][$containsi]=" + bf.toString());
+      });
+
       const newUrl = url.join("");
       return { ...state, url: newUrl };
 
@@ -132,6 +152,6 @@ const filter = (state = initialState, action: FilterAction) => {
     default:
       return state;
   }
-};
+}
 
 export default filter;

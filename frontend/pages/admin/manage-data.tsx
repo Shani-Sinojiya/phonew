@@ -70,17 +70,38 @@ const ManageData = (props: props) => {
     setOpen: (open: boolean) => void;
     id: number;
   }) => {
-    const handleDelete = async (id: number) => {
-      props.setOpen(false);
-      const tost = toast.loading("Deleting...");
-      const res = await fetch(process.env.API_URL + "/phones/" + id, {
+    const ImageDelate = async (id: number) => {
+      const res = await fetch(process.env.API_URL + "/upload/files/" + id, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + process.env.API_TOKEN,
         },
       });
-      const data = await res.json();
-      if (data) {
+
+      const d = await res.json();
+    };
+
+    const handleDelete = async (id: number) => {
+      props.setOpen(false);
+      const tost = toast.loading("Deleting...");
+      const res = await fetch(
+        process.env.API_URL + "/phones/" + id + "?popluate=*",
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "Bearer " + process.env.API_TOKEN,
+          },
+        }
+      );
+      const { data } = await res.json();
+
+      if (data.attributes.image.data !== null) {
+        data.attributes.image.data.map((img: any) =>
+          ImageDelate(img.id as number)
+        );
+      }
+
+      if (res.status == 200) {
         toast.update(tost, {
           render: "Deleted",
           type: "success",

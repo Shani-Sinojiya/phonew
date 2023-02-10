@@ -6,7 +6,7 @@ type Phone = {
   weight: number;
   IPrating: string;
   fastcharging: boolean;
-  colours: string;
+  colours: string[];
   DisplayRefreshRate: string;
   Displaytype: string;
   Displaysize: string;

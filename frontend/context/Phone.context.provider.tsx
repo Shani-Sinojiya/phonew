@@ -42,7 +42,7 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
   const [Weight, setWeight] = useState<string>();
   const [IPRating, setIPRating] = useState<string>();
   const [FastCharing, setFastCharing] = useState<boolean>();
-  const [Color, setColor] = useState<string>();
+  const [Color, setColor] = useState<string[]>([]);
   const [Security, setSecurity] = useState<string[]>([]);
   const [Battery, setBattery] = useState<string>();
   const [Price, setPrice] = useState<string>();
@@ -100,7 +100,7 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
         weight: Number(Weight),
         IPrating: IPRating.trim() as string,
         fastcharging: FastCharing == undefined ? false : FastCharing,
-        colours: Color.trim() as string,
+        colours: Color as string[],
         security: Security as string[],
         battery: Battery.trim() as string,
         buyatamazon: Amazon.trim() as string,

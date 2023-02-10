@@ -8,6 +8,7 @@ const Footer = () => {
   );
   const dispatch = useDispatch();
   const [serverRating, setServerRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
 
   const SeraverSetRating = async (rate: number) => {
     const response = await fetch(process.env.API_URL + "/rating", {
@@ -18,22 +19,30 @@ const Footer = () => {
       body: JSON.stringify({
         data: {
           rating: (rate + serverRating) / 2,
+          rating_counter: totalRatings + 1,
         },
       }),
     });
-    const data = await response.json();
+    const { data } = await response.json();
   };
 
   useEffect(() => {
     const fetchFromServer = async () => {
-      const response = await fetch(process.env.API_URL + "/rating", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        process.env.API_URL +
+          "/rating?fields[0]=rating&fields[1]=rating_counter",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const { data } = await response.json();
-      setServerRating(data.attributes.rating);
+      setTotalRatings(
+        data.attributes.rating_counter ? data.attributes.rating_counter : 0
+      );
+      setServerRating(data.attributes.rating ? data.attributes.rating : 0);
     };
     fetchFromServer();
     dispatch({ type: "SET_RATING_FROM_LOCAL_STORAGE" });

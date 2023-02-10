@@ -4,11 +4,13 @@ import {
   REMOVE_FILTER_PROCESSOR,
   REMOVE_FILTER_RAM,
   REMOVE_FILTER_ROM,
+  REMOVE_FILTER_BETTERY,
   SET_FILTER_CAMERA,
   SET_FILTER_PROCESSOR,
   SET_FILTER_RAM,
   SET_FILTER_ROM,
   SET_FILTER_NETWORK,
+  SET_FILTER_BETTERY,
   SUMBIT,
   CLEAR,
 } from "./types";
@@ -48,6 +50,13 @@ export const setFilterNetwork = (network: string) => {
   };
 };
 
+export const setFilterBattery = (battery: string) => {
+  return {
+    type: SET_FILTER_BETTERY,
+    payload: battery,
+  };
+};
+
 export const removeFilterRam = (ram: string) => {
   return {
     type: REMOVE_FILTER_RAM,
@@ -80,6 +89,13 @@ export const removeFilterNetwork = (network: string) => {
   return {
     type: REMOVE_FILTER_NETWORK,
     payload: network,
+  };
+};
+
+export const removeFilterBattery = (battery: string) => {
+  return {
+    type: REMOVE_FILTER_BETTERY,
+    payload: battery,
   };
 };
 

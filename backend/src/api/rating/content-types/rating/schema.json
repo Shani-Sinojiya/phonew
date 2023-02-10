@@ -17,6 +17,11 @@
       "max": 5,
       "default": 0,
       "min": 0
+    },
+    "rating_counter": {
+      "type": "decimal",
+      "default": 0,
+      "min": 0
     }
   }
 }

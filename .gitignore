@@ -129,7 +129,7 @@ node_modules
 /backend/.idea
 /backend/nbproject
 /backend/public/uploads/*
-/backend/!public/uploads/.gitkeep
+!/backend/public/uploads/.gitkeep
 
 ############################
 # Node.js

@@ -7,6 +7,7 @@ import {
 import Link from "next/link";
 import Router from "next/router";
 import { useState } from "react";
+import validator from "validator";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -22,7 +23,12 @@ const Contact = () => {
   const [show, setShow] = useState<boolean>(true);
 
   const handleSubmit = async () => {
-    if (Name === "" || Email === "" || Detail === "") {
+    if (
+      validator.isEmpty(Email) ||
+      validator.isEmpty(Name) ||
+      !validator.isEmail(Email) ||
+      validator.isEmpty(Detail)
+    ) {
       setShow(false);
       setIsError(true);
       setIsSubmitted(false);
