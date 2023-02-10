@@ -5,6 +5,7 @@ import {
   SHOW_BRAND_MENU,
   SHOW_FILTER_MENU,
   SHOW_PRICE_MENU,
+  HIDE_ALL,
 } from "./types";
 
 class Showmenu {
@@ -41,6 +42,12 @@ class Showmenu {
   HidePriceMenu() {
     return {
       type: HIDE_PRICE_MENU,
+    };
+  }
+
+  HideAllMenu() {
+    return {
+      type: HIDE_ALL,
     };
   }
 }

@@ -6,7 +6,8 @@ import { Fragment, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 
 const Phone = new phone();
 
@@ -22,6 +23,12 @@ const Price = () => {
   const [filterUrl, setFilterUrl] = useState<string>("");
 
   const Router = useRouter();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ShowMenu.HideAllMenu());
+  }, []);
 
   const { url } = useSelector(
     (state: {

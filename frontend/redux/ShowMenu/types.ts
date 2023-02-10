@@ -7,6 +7,7 @@ export const SHOW_PRICE_MENU = "SHOW_PRICE_MENU";
 export const HIDE_FILTER_MENU = "HIDE_FILTER_MENU";
 export const HIDE_BRAND_MENU = "HIDE_BRAND_MENU";
 export const HIDE_PRICE_MENU = "HIDE_PRICE_MENU";
+export const HIDE_ALL = "HIDE_ALL";
 
 type ShowMenuAction = {
   type:
@@ -15,7 +16,8 @@ type ShowMenuAction = {
     | typeof SHOW_PRICE_MENU
     | typeof HIDE_FILTER_MENU
     | typeof HIDE_BRAND_MENU
-    | typeof HIDE_PRICE_MENU;
+    | typeof HIDE_PRICE_MENU
+    | typeof HIDE_ALL;
 };
 
 export type { ShowMenuAction };

@@ -51,7 +51,7 @@ const Footer = () => {
   return (
     <footer className="font-outfit">
       <div className="min-h-[5rem] bg-primary-0 flex justify-center items-center text-center gap-8">
-        <div className="font-semibold text-white text-xl">
+        <div className="font-semibold text-white text-xl max-md:text-lg">
           Help us to improve
         </div>
         <div className="bg-[#5574E4] px-4 py-2 rounded-full flex flex-row text-[#FFEB35]">
@@ -65,12 +65,12 @@ const Footer = () => {
                 SeraverSetRating(rate);
               }
             }}
-            size={34}
+            size={24}
             readonly={rating === 0 ? false : true}
           />
         </div>
       </div>
-      <div className="min-h-[4rem] font-normal bg-gray-100 flex justify-center items-center text-center">
+      <div className="min-h-[4rem] font-normal bg-gray-100 max-md:text-xs flex justify-center items-center text-center">
         All the rights reserved and product by @DeadMad Technologies
       </div>
     </footer>

@@ -1,20 +1,21 @@
 import { HeaderFooterLayout } from "@/layouts";
-import { RootState } from "@/redux/rootReducer";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
 import Router from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const About = () => {
   const Dispatch = useDispatch();
-  const { ShowPriceMenu, ShowBrandMenu, ShowFilterMenu } = useSelector(
-    (state: RootState) => state.ShowMenu
-  );
+
+  useEffect(() => {
+    Dispatch(ShowMenu.HideAllMenu());
+  }, []);
 
   return (
     <HeaderFooterLayout pageTitle="About us">
-      <div className="grid px-16 py-8 bg-[#F8F8F8] gap-y-8">
+      <div className="grid md:px-16 py-8 bg-[#F8F8F8] gap-y-8 max-md:px-8">
         <div className="px-4 py-2 bg-[#EDF1FF] border rounded-xl border-primary-2">
-          <div className="grid md:grid-cols-6 mt-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16">
+          <div className="grid md:grid-cols-6 mt-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16 max-md:grid-flow-row">
             <div className="md:col-span-3 relative">
               <h2 className="font-PhosphateProSolid text-4xl md:max-w-[24rem] w-full max-md:text-2xl text-primary-0">
                 We are PHONEW. <br className="max-md:hidden" /> one-stop
@@ -43,11 +44,11 @@ const About = () => {
                 />
               </svg>
             </div>
-            <div className="col-span-3 max-md:hidden flex justify-center items-center">
+            <div className="col-span-3 max-md:-order-1 max-md:mb-6 flex justify-center items-center">
               <img
                 src="/ab1.svg"
                 alt="s"
-                className="w-64 float-right"
+                className="w-64 float-right max-md:w-36"
                 draggable={false}
               />
             </div>
@@ -74,7 +75,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -84,11 +85,11 @@ const About = () => {
                 />
               </svg>
             </div>
-            <div className="col-span-3 max-md:hidden flex justify-center items-center">
+            <div className="col-span-3 max-md:-order-1 max-md:mb-6 flex justify-center items-center">
               <img
                 src="/ab2.svg"
                 alt="s"
-                className="w-80 float-right"
+                className="w-80 float-right max-md:w-48"
                 draggable={false}
               />
             </div>
@@ -114,7 +115,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -124,11 +125,11 @@ const About = () => {
                 />
               </svg>
             </div>
-            <div className="col-span-3 max-md:hidden flex justify-center items-center">
+            <div className="col-span-3 max-md:-order-1 max-md:mb-6 flex justify-center items-center">
               <img
                 src="/ab3.svg"
                 alt="s"
-                className="w-96 float-right"
+                className="w-96 float-right max-md:w-56"
                 draggable={false}
               />
             </div>
@@ -155,7 +156,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-14 max-md:bottom-4 md:h-24 max-md:h-24 left-[10.5rem] fill-none"
+                className="absolute md:bottom-14 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -165,11 +166,11 @@ const About = () => {
                 />
               </svg>
             </div>
-            <div className="col-span-3 max-md:hidden flex justify-center items-center">
+            <div className="col-span-3 max-md:-order-1 max-md:mb-6 flex justify-center items-center">
               <img
                 src="/AB4.svg"
                 alt="s"
-                className="w-96 float-right -mb-8"
+                className="w-96 float-right -mb-8 max-md:mb-0"
                 draggable={false}
               />
             </div>

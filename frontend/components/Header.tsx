@@ -58,11 +58,11 @@ const HeaderComponent = () => {
 
     return (
       <Navbar fluid={true} rounded={true} className="font-outfit">
-        <Navbar.Brand href="/">
+        <Link href="/" className="flex items-center">
           <span className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
             Phonew
           </span>
-        </Navbar.Brand>
+        </Link>
         <div className="flex md:order-2">
           <Navbar.Toggle
             barIcon={() => (

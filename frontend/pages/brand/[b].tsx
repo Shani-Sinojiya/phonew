@@ -6,8 +6,9 @@ import { Fragment, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GetServerSideProps } from "next";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 
 const Phone = new phone();
 
@@ -22,8 +23,8 @@ const Brand = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [filterUrl, setFilterUrl] = useState<string>("");
 
+  const dispatch = useDispatch();
   const Router = useRouter();
-
   const { url } = useSelector(
     (state: {
       filter: {
@@ -35,6 +36,10 @@ const Brand = () => {
       };
     }) => state.filter
   );
+
+  useEffect(() => {
+    dispatch(ShowMenu.HideAllMenu());
+  }, []);
 
   useEffect(() => {
     setFilterUrl(url);
@@ -138,19 +143,3 @@ const Brand = () => {
 };
 
 export default Brand;
-
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const res = await Phone.getPhones(
-//     process.env.API_URL +
-//       `/phones?populate=*&filters[brand][name][$contains]=${ctx.query.b}`
-//   );
-//   const { data, meta } = res;
-//   const allData = Phone.toNormalFormatArray(data);
-
-//   return {
-//     props: {
-//       data: allData,
-//       pagination: meta.pagination,
-//     },
-//   };
-// };

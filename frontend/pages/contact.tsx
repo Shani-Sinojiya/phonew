@@ -1,4 +1,5 @@
 import { HeaderFooterLayout } from "@/layouts";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -6,7 +7,8 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Router from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import validator from "validator";
 
 function classNames(...classes: string[]) {
@@ -75,9 +77,15 @@ const Contact = () => {
     }
   };
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ShowMenu.HideAllMenu());
+  }, []);
+
   return (
     <HeaderFooterLayout pageTitle="Contact us">
-      <div className="grid px-16 py-8 bg-[#F8F8F8] gap-y-8">
+      <div className="grid md:px-16 py-8 bg-[#F8F8F8] gap-y-8 max-md:px-4">
         <div className="px-4 py-2 bg-[#EDF1FF] border rounded-xl border-primary-2">
           <div className="grid md:grid-cols-6 my-16 mx-16 max-md:my-8 max-md:mx-4 md:gap-x-16 md:divide-x-2 max-md:divide-y-2 divide-primary-2">
             <div className="md:col-span-3 flex flex-col text-left justify-left">

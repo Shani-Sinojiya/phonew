@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 
 const Phone = new phone();
 
@@ -32,6 +33,12 @@ const Search = () => {
       };
     }) => state.filter
   );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ShowMenu.HideAllMenu());
+  }, []);
 
   useEffect(() => {
     setFilterUrl(url);

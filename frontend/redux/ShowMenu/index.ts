@@ -1,4 +1,5 @@
 import {
+  HIDE_ALL,
   HIDE_BRAND_MENU,
   HIDE_FILTER_MENU,
   HIDE_PRICE_MENU,
@@ -61,6 +62,14 @@ const ShowMenu = (state = initialState, action: ShowMenuAction) => {
     case HIDE_PRICE_MENU:
       return {
         ...state,
+        ShowPriceMenu: false,
+      };
+
+    case HIDE_ALL:
+      return {
+        ...state,
+        ShowFilterMenu: false,
+        ShowBrandMenu: false,
         ShowPriceMenu: false,
       };
 

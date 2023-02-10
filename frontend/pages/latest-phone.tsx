@@ -1,12 +1,13 @@
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { HeaderFooterLayout } from "@/layouts";
+import { ShowMenu } from "@/redux/ShowMenu/functions";
 import type { data, pagination, props } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Phone = new phone();
 
@@ -28,6 +29,12 @@ const LatestPhones = (props: props) => {
         };
       }) => state.filter
     );
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(ShowMenu.HideAllMenu());
+    }, []);
 
     useEffect(() => {
       setFilterUrl(url);
