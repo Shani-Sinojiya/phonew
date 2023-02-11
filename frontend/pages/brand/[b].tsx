@@ -7,8 +7,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { useDispatch, useSelector } from "react-redux";
-import { GetServerSideProps } from "next";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
+import { Clear } from "@/redux/filter/functions";
 
 const Phone = new phone();
 
@@ -38,6 +38,7 @@ const Brand = () => {
   );
 
   useEffect(() => {
+    dispatch(Clear());
     dispatch(ShowMenu.HideAllMenu());
   }, []);
 
@@ -70,10 +71,10 @@ const Brand = () => {
       const res = await Phone.getPhones(url);
       const { data, meta } = res;
       const allData = Phone.toNormalFormatArray(data);
-      setData([...Data, ...allData] as data[]);
+      setData([...allData] as unknown as data[]);
       setPagination(meta.pagination);
     };
-
+    setData([]);
     DisplayNew();
   }, [Router.query.b]);
 

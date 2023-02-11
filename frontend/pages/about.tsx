@@ -1,4 +1,5 @@
 import { HeaderFooterLayout } from "@/layouts";
+import { Clear } from "@/redux/filter/functions";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
 import Router from "next/router";
 import { useEffect } from "react";
@@ -8,6 +9,7 @@ const About = () => {
   const Dispatch = useDispatch();
 
   useEffect(() => {
+    Dispatch(Clear());
     Dispatch(ShowMenu.HideAllMenu());
   }, []);
 
@@ -34,7 +36,7 @@ const About = () => {
                 Buy Now
               </button>
               <svg
-                className="absolute md:bottom-[3.25rem] max-md:bottom-4 md:h-[6.5rem] max-md:h-24 left-[8.75rem] fill-none"
+                className="absolute md:bottom-[3.25rem] max-md:bottom-4 md:h-[6.5rem] max-md:h-20 left-[8.75rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -75,7 +77,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-20 max-md:h-[3.5rem] left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -115,7 +117,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
+                className="absolute md:bottom-4 max-md:bottom-4 md:h-24 max-md:h-[3.5rem] left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -156,7 +158,7 @@ const About = () => {
                 Explore now
               </button>
               <svg
-                className="absolute md:bottom-14 max-md:bottom-4 md:h-24 max-md:h-20 left-[10.5rem] fill-none"
+                className="absolute md:bottom-14 max-md:bottom-4 md:h-24 max-md:h-[3.5rem] left-[10.5rem] fill-none"
                 viewBox="0 0 236 157"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -170,7 +172,7 @@ const About = () => {
               <img
                 src="/AB4.svg"
                 alt="s"
-                className="w-96 float-right -mb-8 max-md:mb-0"
+                className="w-96 float-right"
                 draggable={false}
               />
             </div>

@@ -1120,7 +1120,7 @@ const PhoneCreate = () => {
             outline
             onClick={() => Router.push("/admin/manage-data")}
           >
-            Cencel
+            Cancel
           </Button>
         </div>
       );

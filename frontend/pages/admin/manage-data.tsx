@@ -70,17 +70,6 @@ const ManageData = (props: props) => {
     setOpen: (open: boolean) => void;
     id: number;
   }) => {
-    const ImageDelate = async (id: number) => {
-      const res = await fetch(process.env.API_URL + "/upload/files/" + id, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + process.env.API_TOKEN,
-        },
-      });
-
-      const d = await res.json();
-    };
-
     const handleDelete = async (id: number) => {
       props.setOpen(false);
       const tost = toast.loading("Deleting...");
@@ -93,13 +82,7 @@ const ManageData = (props: props) => {
           },
         }
       );
-      const { data } = await res.json();
-
-      if (data.attributes.image.data !== null) {
-        data.attributes.image.data.map((img: any) =>
-          ImageDelate(img.id as number)
-        );
-      }
+      const { data } = await res.json();  
 
       if (res.status == 200) {
         toast.update(tost, {
@@ -374,7 +357,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const res = await fetch(
     process.env.API_URL +
-      "/phones?populate=image&fields[0]=name&fields[1]=release&pagination[pageSize]=27&sort[0]=release:desc",
+      "/phones?populate=image&fields[0]=name&fields[1]=release&pagination[pageSize]=27&sort[0]=createdAt:desc",
     {
       headers: {
         Authorization: "Bearer " + process.env.API_TOKEN,

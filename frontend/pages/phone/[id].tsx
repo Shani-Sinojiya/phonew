@@ -6,7 +6,6 @@ import { HeaderFooterLayout } from "@/layouts";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
 import { Carousel, Tabs } from "flowbite-react";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -14,6 +13,7 @@ type image = {
   id: number;
   url: string;
   alt: string;
+  thumbnail: string;
 };
 
 type display = {
@@ -184,7 +184,7 @@ const Phone = (props: Props) => {
                 </div>
               </div>
               <div className="md:border-t-2 max-md:my-4 w-full border-primary-0/25 my-2">
-                <div className="grid grid-cols-2 mt-1 rounded-full bg-[#F0F0F0] md:p-4 max-md:p-2 md:gap-2 max-md:gap-1 md:divide-x-2 max-md:divide-x-2 divide-slate-300 divide-solid">
+                <div className="grid grid-cols-2 mt-6 rounded-full bg-[#EDF1FF9C] md:p-4 max-md:p-2 md:gap-2 max-md:gap-1 md:divide-x-2 max-md:divide-x-2 divide-slate-300 divide-solid">
                   <div className="grid md:grid-cols-3 max-md:grid-cols-2 max-md:my-2 gap-4 text-center md:place-content-center">
                     <h3 className="font-medium text-lg flex items-center justify-center max-md:hidden">
                       Buy at
@@ -192,7 +192,7 @@ const Phone = (props: Props) => {
                     <BuyAtCard Icon={"Amazon"} to={data.buyAt.amazon} />
                     <BuyAtCard Icon={"Flipkart"} to={data.buyAt.flipkart} />
                   </div>
-                  <div className="grid md:grid-cols-2 gap-x-4 max-md:py-1">
+                  <div className="grid md:grid-cols-2 gap-x-4">
                     <span className="flex md:items-center md:justify-center md:text-xl max-md:text-xs max-md:text-left max-md:ml-4 font-normal">
                       Starting at just
                     </span>

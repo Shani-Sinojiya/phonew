@@ -273,7 +273,7 @@ const AdminDashboard = (props: props) => {
           disableFillHover
           emptyClassName="flex"
         />
-        Rating Count: {props.rating.rating_counter}
+        ({props.rating.rating_counter})
       </div>
       <div className="my-16 mx-16">
         <h1 className="text-2xl font-semibold text-gray-900">Contact Forms</h1>

@@ -1,18 +1,22 @@
 import { useState } from "react";
 
 const MobileImage = (props: {
-  data: { id: number; url: string; alt: string | null }[] | null;
+  data:
+    | { id: number; url: string; alt: string | null; thumbnail: string }[]
+    | null;
 }) => {
   const [image, setImage] = useState<{
     id: number;
     url: string;
     alt: string | null;
-  }>(props.data ? props.data[0] : { id: 0, url: "", alt: "" });
+    thumbnail: string;
+  }>(props.data ? props.data[0] : { id: 0, url: "", alt: "", thumbnail: "" });
 
   const ChengImageHendler = (data: {
     id: number;
     url: string;
     alt: string | null;
+    thumbnail: string;
   }) => {
     setImage(data);
   };
@@ -23,19 +27,19 @@ const MobileImage = (props: {
         <img
           src={process.env.API_IMAGE_URL + image.url}
           alt={image.alt ? image.alt : image.id.toString()}
-          className="w-auto h-[30rem] rounded"
+          className="w-auto h-[15rem] rounded"
         />
       </div>
-      <div className="mx-4 my-2 absolute top-0">
+      <div className="mx-4 my-2 absolute top-0 overflow-y-scroll h-full">
         <ul className="gap-1 grid">
           {props.data?.map((img) => (
             <li
               key={img.id}
-              className="border-2 border-[#4468E954] cursor-pointer rounded w-14 h-20"
+              className="border-2 border-[#4468E954] cursor-pointer rounded w-8 h-15"
               onClick={() => ChengImageHendler(img)}
             >
               <img
-                src={process.env.API_IMAGE_URL + img.url}
+                src={process.env.API_IMAGE_URL + img.thumbnail}
                 alt={img.alt ? img.alt : img.id.toString()}
                 className="object-cover w-full h-full rounded"
               />

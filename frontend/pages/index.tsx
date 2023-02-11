@@ -1,6 +1,7 @@
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { HeaderFooterLayout } from "@/layouts";
+import { Clear } from "@/redux/filter/functions";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
 import type { data, pagination, props } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
@@ -21,9 +22,10 @@ const Home = (props: props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+      dispatch(Clear());
       dispatch(ShowMenu.HideAllMenu());
     }, []);
-    
+
     const { url } = useSelector(
       (state: {
         filter: {
@@ -49,16 +51,24 @@ const Home = (props: props) => {
             `/phones?populate=image,brand&sort[0]=createdAt:desc${filterUrl}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
+
           const allData = Phone.toNormalFormatArray(data);
-          setData([...allData] as unknown as data[]);
-          setPagination(meta.pagination);
+
+          if (allData.length == 0) {
+            setPagination(meta.pagination);
+            setData([]);
+            setHasMore(false);
+          } else {
+            setData([...allData] as unknown as data[]);
+            setPagination(meta.pagination);
+          }
         }
       };
       NewFilterFetch();
     }, [filterUrl]);
 
     const fetchData = async () => {
-      if (Pagination.page === Pagination.pageCount) {
+      if (Pagination.page === 0 || Pagination.pageCount) {
         setHasMore(false);
       } else {
         if (filterUrl !== "") {
@@ -86,21 +96,29 @@ const Home = (props: props) => {
     };
 
     return (
-      <InfiniteScroll
-        dataLength={Data.length}
-        next={fetchData}
-        hasMore={hasMore}
-        loader={
-          <div className="w-full mt-2 grid place-content-center">
-            <Spinner color="info" aria-label="Loader" />
+      <>
+        {Pagination.pageCount == 0 ? (
+          <div className="flex justify-center items-center h-screen">
+            <h1 className="text-2xl font-bold">No Results Found</h1>
           </div>
-        }
-        className="min-h-screen grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
-      >
-        {Data.map((data) => (
-          <Card key={data.id} {...data} />
-        ))}
-      </InfiniteScroll>
+        ) : (
+          <InfiniteScroll
+            dataLength={Data.length}
+            next={fetchData}
+            hasMore={hasMore}
+            loader={
+              <div className="w-full mt-2 grid place-content-center">
+                <Spinner color="info" aria-label="Loader" />
+              </div>
+            }
+            className="min-h-screen grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
+          >
+            {Data.map((data) => (
+              <Card key={data.id} {...data} />
+            ))}
+          </InfiniteScroll>
+        )}
+      </>
     );
   };
 
@@ -113,7 +131,7 @@ const Home = (props: props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const response = await Phone.getPhones(
-    process.env.API_URL + "/phones?populate=image,brand&sort[0]=createdAt:desc"
+    process.env.API_URL + "/phones?populate=*&sort[0]=createdAt:desc"
   );
   const { data, meta } = await response;
   const allData = Phone.toNormalFormatArray(data);

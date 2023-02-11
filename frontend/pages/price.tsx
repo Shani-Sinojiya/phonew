@@ -8,6 +8,7 @@ import { Card } from "@/components";
 import { phone } from "@/data";
 import { useDispatch, useSelector } from "react-redux";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
+import { Clear } from "@/redux/filter/functions";
 
 const Phone = new phone();
 
@@ -27,6 +28,7 @@ const Price = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(Clear());
     dispatch(ShowMenu.HideAllMenu());
   }, []);
 
@@ -86,7 +88,7 @@ const Price = () => {
         const res = await Phone.getPhones(url);
         const { data, meta } = res;
         const allData = Phone.toNormalFormatArray(data);
-        setData([...Data, ...allData] as data[]);
+        setData([...allData] as unknown as data[]);
         setPagination(meta.pagination);
       }
     };

@@ -2,12 +2,13 @@ import { HeaderFooterLayout } from "@/layouts";
 import { data, pagination } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { useDispatch, useSelector } from "react-redux";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
+import { Clear } from "@/redux/filter/functions";
 
 const Phone = new phone();
 
@@ -37,6 +38,7 @@ const Search = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(Clear());
     dispatch(ShowMenu.HideAllMenu());
   }, []);
 
@@ -49,7 +51,7 @@ const Search = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=*&filters[name][$containsi]=${Router.query.q}` +
           filterUrl;
         const res = await Phone.getPhones(url);
         const { data, meta } = res;
@@ -65,7 +67,7 @@ const Search = () => {
     const DisplayNew = async () => {
       const url =
         process.env.API_URL +
-        `/phones?populate=image&filters[name][$containsi]=${Router.query.q}`;
+        `/phones?populate=*&filters[name][$containsi]=${Router.query.q}`;
       const res = await Phone.getPhones(url);
       const { data, meta } = res;
       const allData = Phone.toNormalFormatArray(data);
@@ -83,7 +85,7 @@ const Search = () => {
       if (filterUrl !== "") {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${Router.query.q}` +
+          `/phones?populate=*&filters[name][$containsi]=${Router.query.q}` +
           filterUrl +
           `&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
@@ -94,7 +96,7 @@ const Search = () => {
       } else {
         const url =
           process.env.API_URL +
-          `/phones?populate=image&filters[name][$containsi]=${
+          `/phones?populate=*&filters[name][$containsi]=${
             Router.query.q
           }&pagination[page]=${Pagination.page + 1}`;
         const res = await Phone.getPhones(url);
@@ -113,7 +115,7 @@ const Search = () => {
           <h1 className="text-2xl font-bold">No Results Found</h1>
         </div>
       ) : (
-        <>
+        <Fragment>
           <h2 className="w-full bg-[#F8F8F8] pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
             <span className="col-span-2"></span>
             <span className="col-span-10">
@@ -135,7 +137,7 @@ const Search = () => {
               <Card key={data.id} {...data} />
             ))}
           </InfiniteScroll>
-        </>
+        </Fragment>
       )}
     </HeaderFooterLayout>
   );

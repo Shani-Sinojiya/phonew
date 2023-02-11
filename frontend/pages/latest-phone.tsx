@@ -1,11 +1,12 @@
 import { Card } from "@/components";
 import { phone } from "@/data";
 import { HeaderFooterLayout } from "@/layouts";
+import { Clear } from "@/redux/filter/functions";
 import { ShowMenu } from "@/redux/ShowMenu/functions";
 import type { data, pagination, props } from "@/types/Phones.type";
 import { Spinner } from "flowbite-react";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -33,6 +34,7 @@ const LatestPhones = (props: props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+      dispatch(Clear());
       dispatch(ShowMenu.HideAllMenu());
     }, []);
 
@@ -49,8 +51,14 @@ const LatestPhones = (props: props) => {
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
           const allData = Phone.toNormalFormatArray(data);
-          setData([...allData] as unknown as data[]);
-          setPagination(meta.pagination);
+          if (allData.length == 0) {
+            setPagination(meta.pagination);
+            setData([]);
+            setHasMore(false);
+          } else {
+            setData([...allData] as unknown as data[]);
+            setPagination(meta.pagination);
+          }
         }
       };
       NewFilterFetch();
@@ -87,21 +95,29 @@ const LatestPhones = (props: props) => {
     };
 
     return (
-      <InfiniteScroll
-        dataLength={Data.length}
-        next={fetchData}
-        hasMore={hasMore}
-        loader={
-          <div className="w-full mt-2 grid place-content-center">
-            <Spinner color="info" aria-label="Loader" />
+      <Fragment>
+        {Pagination.pageCount == 0 ? (
+          <div className="flex justify-center items-center h-screen">
+            <h1 className="text-2xl font-bold">No Results Found</h1>
           </div>
-        }
-        className="min-h-screen grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
-      >
-        {Data.map((data) => (
-          <Card key={data.id} {...data} />
-        ))}
-      </InfiniteScroll>
+        ) : (
+          <InfiniteScroll
+            dataLength={Data.length}
+            next={fetchData}
+            hasMore={hasMore}
+            loader={
+              <div className="w-full mt-2 grid place-content-center">
+                <Spinner color="info" aria-label="Loader" />
+              </div>
+            }
+            className="min-h-screen grid md:gap-16 max-md:gap-4 place-content-center px-32 py-16 bg-[#F8F8F8] font-outfit max-md:p-4"
+          >
+            {Data.map((data) => (
+              <Card key={data.id} {...data} />
+            ))}
+          </InfiniteScroll>
+        )}
+      </Fragment>
     );
   };
 

@@ -144,6 +144,8 @@ function filter(state = initialState, action: FilterAction) {
         ...state,
         ramFilter: [],
         romFilter: [],
+        betteryFilter:[],
+        networkFilter:[],
         cameraFilter: [],
         processorFilter: [],
         url: [],

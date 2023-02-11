@@ -1140,7 +1140,7 @@ const PhonesInOne = (props: props) => {
             outline
             onClick={() => Router.push("/admin/manage-data")}
           >
-            Cencel
+            Cancel
           </Button>
         </div>
       );

@@ -11,7 +11,7 @@ class phone {
       id: data.id,
       name: data.attributes.name,
       price: data.attributes.price,
-      brand: data.attributes.brand.data.attributes.name,
+      brand: data.attributes.brand.data?.attributes.name || "",
       network: data.attributes.network,
       display: {
         size: data.attributes.Displaysize,
@@ -59,6 +59,7 @@ class phone {
                 id: img.id,
                 url: img.attributes.url,
                 alt: img.attributes.alternativeText,
+                thumbnail: img.attributes.formats.thumbnail.url,
               };
             }),
     };

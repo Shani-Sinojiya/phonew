@@ -127,6 +127,7 @@ type propImage = {
   id: number;
   url: string;
   alt: string | null;
+  thumbnail: string;
 };
 
 type data = {

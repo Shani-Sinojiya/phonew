@@ -451,7 +451,7 @@ const HeaderComponent = () => {
             dispatch(ShowMenu.HideBrandMenu());
           }}
         >
-          <ul className="grid md:grid-cols-6 grid-cols-3 gap-4">
+          <ul className="grid md:grid-cols-6 grid-cols-2 gap-4">
             {Brands.map((item, index) => {
               return (
                 <li className="hover:underline" key={index}>
@@ -512,9 +512,9 @@ const HeaderComponent = () => {
           <ul>
             {Features.map((Feature, index) => {
               return (
-                <li className="grid grid-cols-5 mb-4" key={index}>
+                <li className="grid grid-cols-5 max-md:grid-cols-4 mb-4" key={index}>
                   <h3 className="text-md col-span-1">{Feature.title}:</h3>
-                  <ul className="col-span-4 flex gap-x-2">
+                  <ul className="col-span-4 max-md:col-span-3 flex gap-x-2 max-md:overflow-auto">
                     {Feature.data.map((d, index) => {
                       return (
                         <FilterFeatureList
