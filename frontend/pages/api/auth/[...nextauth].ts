@@ -20,7 +20,7 @@ export default NextAuth({
           email: string;
           password: string;
         };
-        if (email !== "admin@phonew.com" && password !== "Admin@Phonew") {
+        if (email !== "admin@phonew.in" && password !== "Admin@Phonew") {
           return null;
         }
         return {

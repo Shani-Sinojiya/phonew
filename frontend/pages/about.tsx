@@ -170,7 +170,7 @@ const About = () => {
             </div>
             <div className="col-span-3 max-md:-order-1 max-md:mb-6 flex justify-center items-center">
               <img
-                src="/AB4.svg"
+                src="/ab4.svg"
                 alt="s"
                 className="w-96 float-right"
                 draggable={false}

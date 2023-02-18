@@ -26,17 +26,6 @@ const error404 = () => {
                 >
                   Go to Home
                 </Link>
-                <div className="font-outfit">
-                  <span>
-                    <strong>Design by: </strong>
-                    <Link
-                      href="https://www.shanisinojiya.com/"
-                      className="hover:underline hover:text-primary-0 font-medium"
-                    >
-                      Shani Sinojiya
-                    </Link>
-                  </span>
-                </div>
               </div>
             </div>
           </div>

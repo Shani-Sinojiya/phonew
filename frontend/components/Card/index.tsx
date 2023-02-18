@@ -5,6 +5,7 @@ import Link from "next/link";
 import BuyAtCard from "./BuyAtCard";
 import CardDetail from "./Detail";
 import MobileImage from "./MobileImage";
+import { classNames } from "@/lib";
 
 const Card = (props: data) => {
   return (
@@ -92,12 +93,23 @@ const Card = (props: data) => {
           </div>
           <div className="md:border-t-2 max-md:my-4 w-full border-primary-0/25 my-2">
             <div className="grid grid-cols-2 mt-6 rounded-full bg-[#F0F0F0] md:p-4 max-md:p-2 md:gap-2 max-md:gap-1 md:divide-x-2 max-md:divide-x-2 divide-slate-300 divide-solid">
-              <div className="grid md:grid-cols-3 max-md:grid-cols-2 max-md:my-2 gap-4 text-center md:place-content-center">
+              <div
+                className={classNames(
+                  "grid md:grid-cols-3 max-md:my-2 gap-4 text-center md:place-content-center justify-center items-center",
+                  props.buyAt.amazon == "" || props.buyAt.flipkart == ""
+                    ? "max-md:flex"
+                    : "max-md:grid-cols-2 max-md:gap-2"
+                )}
+              >
                 <h3 className="font-medium text-lg flex items-center justify-center max-md:hidden">
                   Buy at
                 </h3>
-                <BuyAtCard Icon={"Amazon"} to={props.buyAt.amazon} />
-                <BuyAtCard Icon={"Flipkart"} to={props.buyAt.flipkart} />
+                {props.buyAt.amazon == "" ? null : (
+                  <BuyAtCard Icon={"Amazon"} to={props.buyAt.amazon} />
+                )}
+                {props.buyAt.flipkart == "" ? null : (
+                  <BuyAtCard Icon={"Flipkart"} to={props.buyAt.flipkart} />
+                )}
               </div>
               <div className="grid md:grid-cols-2 gap-x-4">
                 <span className="flex md:items-center md:justify-center md:text-xl max-md:text-xs max-md:text-left max-md:ml-4 font-normal">

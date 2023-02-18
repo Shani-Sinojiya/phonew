@@ -2,7 +2,14 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { AdminLayout } from "@/layouts";
 import { AdminHeader } from "@/components";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { Button, Label, Select, TextInput } from "flowbite-react";
 import { toast } from "react-toastify";
 import ImageIDProvider from "@/context/ImageID.context.provider";
@@ -659,7 +666,7 @@ const PhoneCreate = () => {
         );
       };
 
-      const DisplayResolutionsection = () => {
+      const DisplayResolutionsection = useCallback(() => {
         const { Resolution, setResolution } = useContext(CreatePhoneContext);
         const [DisplayResolutionsArray, setDisplayResolutionsArray] = useState<
           string[]
@@ -681,6 +688,13 @@ const PhoneCreate = () => {
                 value={"Display Resolution"}
               />
             </div>
+            <TextInput
+              id="DisplayResolutionText"
+              type={"text"}
+              value={Resolution}
+              className="my-2"
+              onChange={(e) => setResolution(e.target.value)}
+            />
             <Select
               id="DisplayResolution"
               value={Resolution}
@@ -695,7 +709,7 @@ const PhoneCreate = () => {
             </Select>
           </div>
         );
-      };
+      }, []);
 
       return (
         <div className="max-w-xl my-4">

@@ -1,4 +1,4 @@
-import type { brandData, data, ServerBrand } from "@/types/Brand.types";
+import type { data, ServerBrand } from "@/types/Brand.types";
 
 class Brand {
   protected ApiUrl = process.env.API_URL + "/brands";

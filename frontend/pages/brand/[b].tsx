@@ -117,8 +117,8 @@ const Brand = () => {
       ) : (
         <Fragment>
           <h2 className="w-full bg-[#F8F8F8] pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
-            <span className="col-span-2"></span>
-            <span className="col-span-10">
+            <span className="col-span-2 max-md:col-span-1"></span>
+            <span className="col-span-10 max-md:col-span-11">
               Search: <span className="text-filter">{Router.query.b}</span>
             </span>
           </h2>

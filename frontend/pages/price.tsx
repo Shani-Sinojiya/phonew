@@ -54,7 +54,7 @@ const Price = () => {
         if (Router.query.s && Router.query.e) {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=release:desc&filters[price][$gte]=${
+            `/phones?populate=*&sort[0]=release:desc&filters[price][$gte]=${
               Router.query.s
             }${
               Router.query.e == "above"
@@ -78,7 +78,7 @@ const Price = () => {
       if (Router.query.s && Router.query.e) {
         const url =
           process.env.API_URL +
-          `/phones?populate=image,brand&sort[0]=release:desc&filters[price][$gte]=${
+          `/phones?populate=*&sort[0]=release:desc&filters[price][$gte]=${
             Router.query.s
           }${
             Router.query.e == "above"
@@ -104,7 +104,7 @@ const Price = () => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=release:desc&filters[price][$gte]=${
+            `/phones?populate=*&sort[0]=release:desc&filters[price][$gte]=${
               Router.query.s
             }${
               Router.query.e == "above"
@@ -121,9 +121,7 @@ const Price = () => {
         } else {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&filters[price][$gte]=${
-              Router.query.s
-            }${
+            `/phones?populate=*&filters[price][$gte]=${Router.query.s}${
               Router.query.e == "above"
                 ? ""
                 : `&filters[price][$lte]=${Router.query.e}`
@@ -149,8 +147,8 @@ const Price = () => {
       ) : (
         <Fragment>
           <h2 className="w-full bg-[#F8F8F8] z-0 pt-6 text-primary-1 font-semibold font-outfit grid grid-cols-12 text-xl">
-            <span className="col-span-2"></span>
-            <span className="col-span-10">
+            <span className="col-span-2 max-md:col-span-1"></span>
+            <span className="col-span-10 max-md:col-span-11">
               Price:{" "}
               <span className="text-filter">
                 {Router.query.s + " to " + Router.query.e}

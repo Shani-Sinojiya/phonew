@@ -57,8 +57,6 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
   // upload funcation
   const hendleUpload = async () => {
     if (
-      Amazon === undefined ||
-      Filpkart === undefined ||
       OS === undefined ||
       Rear === undefined ||
       Front === undefined ||
@@ -103,8 +101,8 @@ const PhoneProvider = (props: { children?: ReactNode; data: data }) => {
         colours: Color as string[],
         security: Security as string[],
         battery: Battery.trim() as string,
-        buyatamazon: Amazon.trim() as string,
-        buyatflipkart: Filpkart.trim() as string,
+        buyatamazon: Amazon == undefined ? "" : Amazon.trim(),
+        buyatflipkart: Filpkart == undefined ? "" : Filpkart.trim(),
         OS: (OS.trim() + " " + OSVersion?.trim()) as string,
         camerarear: Rear.trim() as string,
         camerafront: Front.trim() as string,

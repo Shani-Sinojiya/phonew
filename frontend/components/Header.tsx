@@ -44,6 +44,11 @@ const HeaderComponent = () => {
         link: "/contact",
         active: router.asPath === "/contact" ? true : false,
       },
+      {
+        name: "Privacy Policy",
+        link: "/privacy-policy",
+        active: router.asPath === "/privacy-policy" ? true : false,
+      },
     ];
 
     const SearchVa = router.query.q ? router.query.q.toString() : "";
@@ -57,7 +62,7 @@ const HeaderComponent = () => {
     };
 
     return (
-      <Navbar fluid={true} rounded={true} className="font-outfit">
+      <Navbar fluid={true} rounded={true} className="font-outfit -mt-5">
         <Link href="/" className="flex items-center">
           <span className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
             Phonew
@@ -162,12 +167,37 @@ const HeaderComponent = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const Ram: string[] = ["3GB", "4GB", "6GB", "8GB", "12GB"];
-    const Rom: string[] = ["64GB", "128GB", "256GB", "512GB", "1TB"];
+    const Ram: string[] = [
+      "2GB",
+      "3GB",
+      "4GB",
+      "6GB",
+      "8GB",
+      "12GB",
+      "16GB",
+      "32GB",
+    ];
+    const Rom: string[] = [
+      "16GB",
+      "32GB",
+      "64GB",
+      "128GB",
+      "256GB",
+      "512GB",
+      "1TB",
+    ];
     const Battery: string[] = ["2000", "3000", "4000", "5000"];
     const Camera: string[] = ["12", "20", "24", "48", "108"];
     const Network: string[] = ["3G", "4G", "5G"];
-    const Processor: string[] = ["Snapdragon", "Mediatek", "Apple", "Exynos"];
+    const Processor: string[] = [
+      "Snapdragon",
+      "Mediatek",
+      "Dimensity",
+      "Mediatek",
+      "Apple",
+      "Exynos",
+      "Kirin",
+    ];
 
     type price = { start: number; stop?: number; above: boolean }[];
     type features = { title: string; data: string[] }[];
@@ -512,7 +542,10 @@ const HeaderComponent = () => {
           <ul>
             {Features.map((Feature, index) => {
               return (
-                <li className="grid grid-cols-5 max-md:grid-cols-4 mb-4" key={index}>
+                <li
+                  className="grid grid-cols-5 max-md:grid-cols-4 mb-4"
+                  key={index}
+                >
                   <h3 className="text-md col-span-1">{Feature.title}:</h3>
                   <ul className="col-span-4 max-md:col-span-3 flex gap-x-2 max-md:overflow-auto">
                     {Feature.data.map((d, index) => {

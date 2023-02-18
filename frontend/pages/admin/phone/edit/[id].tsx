@@ -14,6 +14,7 @@ import {
   useEffect,
   ChangeEvent,
   Fragment,
+  useCallback,
 } from "react";
 import { toast } from "react-toastify";
 import PhoneProvider from "@/context/Phone.context.provider";
@@ -682,7 +683,7 @@ const PhonesInOne = (props: props) => {
         );
       };
 
-      const DisplayResolutionsection = () => {
+      const DisplayResolutionsection = useCallback(() => {
         const { Resolution, setResolution } = useContext(PhoneContext);
         const [DisplayResolutionsArray, setDisplayResolutionsArray] = useState<
           string[]
@@ -704,6 +705,13 @@ const PhonesInOne = (props: props) => {
                 value={"Display Resolution"}
               />
             </div>
+            <TextInput
+              id="DisplayResolutionText"
+              type={"text"}
+              value={Resolution}
+              className="my-2"
+              onChange={(e) => setResolution(e.target.value)}
+            />
             <Select
               id="DisplayResolution"
               value={Resolution}
@@ -718,7 +726,7 @@ const PhonesInOne = (props: props) => {
             </Select>
           </div>
         );
-      };
+      }, []);
 
       return (
         <div className="max-w-xl my-4">

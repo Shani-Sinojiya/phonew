@@ -21,9 +21,6 @@ module.exports = {
         primary: ["#4468E9", "#2260FF", "#708FFF", "#738EEC", "#ACBEFF"],
         filter: "#1C1C1C",
       },
-      backgroundImage: {
-        lineofabout: "url('/line_of_about.svg')",
-      },
     },
   },
   plugins: [require("@tailwindcss/forms"), require("flowbite/plugin")],

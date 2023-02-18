@@ -8,6 +8,7 @@ import { Carousel, Tabs } from "flowbite-react";
 import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { classNames } from "@/lib";
 
 type image = {
   id: number;
@@ -98,9 +99,98 @@ const Phone = (props: Props) => {
     ];
 
     return (
-      date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
+      date.getDate() + " " + months[date.getMonth()] + ", " + date.getFullYear()
     );
   };
+
+  const Genral: { title: string; value: string }[] = [
+    {
+      title: "Brand name",
+      value: data.brand,
+    },
+    {
+      title: "Model name",
+      value: data.name,
+    },
+    {
+      title: "Release date",
+      value: ReleseDate(data.general.release),
+    },
+    {
+      title: "Weight",
+      value: data.general.weight + "gm",
+    },
+    {
+      title: "IP rating",
+      value: "IP" + data.general.IPrating,
+    },
+    {
+      title: "Fast charging support",
+      value: data.general.fastcharging ? "Yes" : "No",
+    },
+    {
+      title: "Colours",
+      value: data.general.colours.join(" | "),
+    },
+  ];
+
+  const display: { title: string; value: string }[] = [
+    {
+      title: "Display type",
+      value: data.display.type,
+    },
+    {
+      title: "Refresh Rate",
+      value: data.display.fps,
+    },
+    {
+      title: "Screen size",
+      value: data.display.size,
+    },
+    {
+      title: "Resolution",
+      value: data.display.resolution,
+    },
+    {
+      title: "Pixels per inch (PPI)",
+      value: data.display.PPI,
+    },
+  ];
+
+  const Hardwere: { title: string; value: string }[] = [
+    {
+      title: "Processor",
+      value: data.hardware.processor,
+    },
+    {
+      title: "Processor name",
+      value: data.hardware.processorName,
+    },
+    {
+      title: "RAM",
+      value: data.hardware.RAM.join(" | "),
+    },
+    {
+      title: "Internal storage",
+      value: data.hardware.ROM.join(" | "),
+    },
+  ];
+
+  const Cemera: { title: string; value: string }[] = [
+    {
+      title: "Rear camera",
+      value: data.camera.rear,
+    },
+    {
+      title: "Front camera",
+      value: data.camera.front,
+    },
+    {
+      title: "No. of cameras",
+      value: data.camera.number.toString(),
+    },
+  ];
+
   return (
     <HeaderFooterLayout pageTitle={data.brand + " " + data.name}>
       <div className="py-8 px-32 bg-[#F8F8F8] font-outfit max-md:px-4">
@@ -185,12 +275,23 @@ const Phone = (props: Props) => {
               </div>
               <div className="md:border-t-2 max-md:my-4 w-full border-primary-0/25 my-2">
                 <div className="grid grid-cols-2 mt-6 rounded-full bg-[#EDF1FF9C] md:p-4 max-md:p-2 md:gap-2 max-md:gap-1 md:divide-x-2 max-md:divide-x-2 divide-slate-300 divide-solid">
-                  <div className="grid md:grid-cols-3 max-md:grid-cols-2 max-md:my-2 gap-4 text-center md:place-content-center">
+                  <div
+                    className={classNames(
+                      "grid md:grid-cols-3 max-md:my-2 gap-4 text-center md:place-content-center justify-center items-center",
+                      data.buyAt.amazon == "" || data.buyAt.flipkart == ""
+                        ? "max-md:flex"
+                        : "max-md:grid-cols-2 max-md:gap-2"
+                    )}
+                  >
                     <h3 className="font-medium text-lg flex items-center justify-center max-md:hidden">
                       Buy at
                     </h3>
-                    <BuyAtCard Icon={"Amazon"} to={data.buyAt.amazon} />
-                    <BuyAtCard Icon={"Flipkart"} to={data.buyAt.flipkart} />
+                    {data.buyAt.amazon == "" ? null : (
+                      <BuyAtCard Icon={"Amazon"} to={data.buyAt.amazon} />
+                    )}
+                    {data.buyAt.flipkart == "" ? null : (
+                      <BuyAtCard Icon={"Flipkart"} to={data.buyAt.flipkart} />
+                    )}
                   </div>
                   <div className="grid md:grid-cols-2 gap-x-4">
                     <span className="flex md:items-center md:justify-center md:text-xl max-md:text-xs max-md:text-left max-md:ml-4 font-normal">
@@ -220,97 +321,65 @@ const Phone = (props: Props) => {
             >
               <Tabs.Item title="General" active={true}>
                 <div className="flex font-outfit mx-16 max-md:mx-2">
-                  <div className="grid grid-cols-5 w-full">
-                    <div className="font-medium text-[#515151] col-span-2">
-                      <ul className="gap-4 grid">
-                        <li>Brand name:</li>
-                        <li>Model name:</li>
-                        <li>Release date:</li>
-                        <li>Weight:</li>
-                        <li>IP rating:</li>
-                        <li>Fast charging support:</li>
-                        <li>Colours:</li>
-                      </ul>
-                    </div>
-                    <div className="font-medium text-[#1C1C1C] col-span-3">
-                      <ul className="gap-4 grid">
-                        <li>{data.brand}</li>
-                        <li>{data.name}</li>
-                        <li>{ReleseDate(data.general.release)}</li>
-                        <li>{data.general.weight}gm</li>
-                        <li>IP{data.general.IPrating}</li>
-                        <li>{data.general.fastcharging ? "Yes" : "No"}</li>
-                        <li>{data.general.colours.join(" | ")}</li>
-                      </ul>
-                    </div>
+                  <div className="grid gap-y-4 w-full">
+                    {Genral.map((d) => (
+                      <div className="grid-cols-5 grid">
+                        <div className="font-medium text-[#515151] col-span-2">
+                          {d.title}:
+                        </div>
+                        <div className="font-medium text-[#1C1C1C] col-span-3">
+                          {d.value}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </Tabs.Item>
               <Tabs.Item title="Display">
                 <div className="flex font-outfit mx-16 max-md:mx-2">
-                  <div className="grid grid-cols-5 w-full">
-                    <div className="font-medium text-[#515151] col-span-2">
-                      <ul className="gap-4 grid">
-                        <li>Display type:</li>
-                        <li>Refresh Rate:</li>
-                        <li>Screen size:</li>
-                        <li>Resolution:</li>
-                        <li>
-                          Pixels per inch {"("}PPI{")"}:
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="font-medium text-[#1C1C1C] col-span-3">
-                      <ul className="gap-4 grid">
-                        <li>{data.display.type}</li>
-                        <li>{data.display.fps}hz</li>
-                        <li>{data.display.size}inch</li>
-                        <li>{data.display.resolution}</li>
-                        <li>{data.display.PPI}</li>
-                      </ul>
-                    </div>
+                  <div className="grid gap-y-4 w-full">
+                    {display.map((d) => (
+                      <div className="grid-cols-5 grid">
+                        <div className="font-medium text-[#515151] col-span-2">
+                          {d.title}:
+                        </div>
+                        <div className="font-medium text-[#1C1C1C] col-span-3">
+                          {d.value}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </Tabs.Item>
               <Tabs.Item title="Hardware">
                 <div className="flex font-outfit mx-16 max-md:mx-2">
-                  <div className="grid grid-cols-5 w-full">
-                    <div className="font-medium text-[#515151] col-span-2">
-                      <ul className="gap-4 grid">
-                        <li>Processor:</li>
-                        <li>Processor name:</li>
-                        <li>RAM:</li>
-                        <li>Internal storage:</li>
-                      </ul>
-                    </div>
-                    <div className="font-medium text-[#1C1C1C] col-span-3">
-                      <ul className="gap-4 grid">
-                        <li>{data.hardware.processor}</li>
-                        <li>{data.hardware.processorName}</li>
-                        <li>{data.hardware.RAM.join(" | ")}</li>
-                        <li>{data.hardware.ROM.join(" | ")}</li>
-                      </ul>
-                    </div>
+                  <div className="grid gap-y-4 w-full">
+                    {Hardwere.map((d) => (
+                      <div className="grid-cols-5 grid">
+                        <div className="font-medium text-[#515151] col-span-2">
+                          {d.title}:
+                        </div>
+                        <div className="font-medium text-[#1C1C1C] col-span-3">
+                          {d.value}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </Tabs.Item>
               <Tabs.Item title="Camera">
                 <div className="flex font-outfit mx-16 max-md:mx-2">
-                  <div className="grid grid-cols-5 w-full">
-                    <div className="font-medium text-[#515151] col-span-2">
-                      <ul className="gap-4 grid">
-                        <li>Rear camera:</li>
-                        <li>Front camera:</li>
-                        <li>No. of cameras</li>
-                      </ul>
-                    </div>
-                    <div className="font-medium text-[#1C1C1C] col-span-3">
-                      <ul className="gap-4 grid">
-                        <li>{data.camera.rear} MP</li>
-                        <li>{data.camera.front} MP</li>
-                        <li>{data.camera.number}</li>
-                      </ul>
-                    </div>
+                  <div className="grid gap-y-4 w-full">
+                    {Cemera.map((d) => (
+                      <div className="grid-cols-5 grid">
+                        <div className="font-medium text-[#515151] col-span-2">
+                          {d.title}:
+                        </div>
+                        <div className="font-medium text-[#1C1C1C] col-span-3">
+                          {d.value}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </Tabs.Item>
@@ -343,7 +412,7 @@ const Phone = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const res = await PhoneClass.getPhone(
-    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=image,brand"
+    process.env.API_URL + "/phones/" + ctx.query.id + "?populate=*"
   );
   if (res.error) {
     return {

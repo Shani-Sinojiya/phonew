@@ -2,21 +2,21 @@ import { useState } from "react";
 
 const MobileImage = (props: {
   data:
-    | { id: number; url: string; alt: string | null; thumbnail: string }[]
+    | { id: number; url: string; thumbnail: string; alt: string | null }[]
     | null;
 }) => {
   const [image, setImage] = useState<{
     id: number;
     url: string;
-    alt: string | null;
     thumbnail: string;
-  }>(props.data ? props.data[0] : { id: 0, url: "", alt: "", thumbnail: "" });
+    alt: string | null;
+  }>(props.data ? props.data[0] : { id: 0, url: "", thumbnail: "", alt: "" });
 
   const ChengImageHendler = (data: {
     id: number;
     url: string;
-    alt: string | null;
     thumbnail: string;
+    alt: string | null;
   }) => {
     setImage(data);
   };
@@ -35,7 +35,7 @@ const MobileImage = (props: {
           {props.data?.map((img) => (
             <li
               key={img.id}
-              className="border-2 border-[#4468E954] cursor-pointer rounded w-8 h-15"
+              className="border-2 border-[#4468E954] cursor-pointer rounded w-8 h-14"
               onClick={() => ChengImageHendler(img)}
             >
               <img

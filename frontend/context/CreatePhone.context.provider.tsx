@@ -52,8 +52,6 @@ const CreatePhoneProvider = (props: { children?: ReactNode }) => {
   // upload funcation
   const hendleUpload = async () => {
     if (
-      Amazon === undefined ||
-      Filpkart === undefined ||
       OS === undefined ||
       Rear === undefined ||
       Front === undefined ||
@@ -98,8 +96,8 @@ const CreatePhoneProvider = (props: { children?: ReactNode }) => {
         colours: Color as string[],
         security: Security as string[],
         battery: Battery.trim() as string,
-        buyatamazon: Amazon.trim() as string,
-        buyatflipkart: Filpkart.trim() as string,
+        buyatamazon: Amazon == undefined ? "" : Amazon.trim(),
+        buyatflipkart: Filpkart == undefined ? "" : Filpkart.trim(),
         OS: (OS.trim() + " " + OSVersion?.trim()) as string,
         camerarear: Rear.trim() as string,
         camerafront: Front.trim() as string,
@@ -126,6 +124,8 @@ const CreatePhoneProvider = (props: { children?: ReactNode }) => {
         body: JSON.stringify({ data: body }),
       });
 
+      const data = await res.json();
+
       if (res.status === 200) {
         toast.update(toasts, {
           render: "Phone Created",
@@ -136,7 +136,7 @@ const CreatePhoneProvider = (props: { children?: ReactNode }) => {
         router.push("/admin/manage-data");
       } else {
         toast.update(toasts, {
-          render: "Error",
+          render: "Error: " + data,
           type: "error",
           isLoading: false,
           autoClose: 2000,

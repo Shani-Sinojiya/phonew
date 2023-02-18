@@ -72,10 +72,10 @@
       "type": "decimal"
     },
     "buyatamazon": {
-      "type": "string"
+      "type": "text"
     },
     "buyatflipkart": {
-      "type": "string"
+      "type": "text"
     },
     "DisplayPPI": {
       "type": "string"

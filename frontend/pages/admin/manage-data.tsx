@@ -70,6 +70,8 @@ const ManageData = (props: props) => {
     setOpen: (open: boolean) => void;
     id: number;
   }) => {
+    const cancelButtonRef = useRef(null);
+
     const handleDelete = async (id: number) => {
       props.setOpen(false);
       const tost = toast.loading("Deleting...");
@@ -82,7 +84,6 @@ const ManageData = (props: props) => {
           },
         }
       );
-      const { data } = await res.json();  
 
       if (res.status == 200) {
         toast.update(tost, {
@@ -101,7 +102,7 @@ const ManageData = (props: props) => {
       }
       props.FetchFunction();
     };
-    const cancelButtonRef = useRef(null);
+
     return (
       <Transition.Root show={props.open} as={Fragment}>
         <Dialog

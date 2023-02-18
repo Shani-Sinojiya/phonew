@@ -7,7 +7,7 @@ const BuyAtCard = (props: { Icon: "Amazon" | "Flipkart"; to: string }) => {
       <Link
         href={props.to}
         className={classNames(
-          "bg-black flex items-center justify-center md:py-3 md:px-4 rounded-xl max-md:px-2"
+          "bg-black flex items-center justify-center md:py-3 md:px-4 rounded-xl max-md:px-2 max-md:py-2"
         )}
       >
         <svg
@@ -78,7 +78,7 @@ const BuyAtCard = (props: { Icon: "Amazon" | "Flipkart"; to: string }) => {
     <Link
       href={props.to}
       className={classNames(
-        "bg-black flex items-center justify-center md:py-2 md:px-4 rounded-xl max-md:px-2"
+        "bg-black flex items-center justify-center md:py-2 md:px-4 rounded-xl max-md:px-2 max-md:pb-[0.28rem]"
       )}
     >
       <svg

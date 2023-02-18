@@ -332,17 +332,6 @@ const error500 = () => {
       <h2 className="mb-6 max-w-[568px] font-stretch-normal text-error500 text-base text-center font-FiraSansCondensed font-normal leading-[1.31] not-italic tracking-normal">
         Have you tried turning it off and on again?
       </h2>
-      <div className="font-outfit">
-        <span>
-          <strong>Design by: </strong>
-          <Link
-            href="https://www.shanisinojiya.com/"
-            className="hover:underline hover:text-primary-0 font-medium"
-          >
-            Shani Sinojiya
-          </Link>
-        </span>
-      </div>
     </main>
   );
 };
