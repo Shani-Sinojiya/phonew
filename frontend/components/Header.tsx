@@ -62,7 +62,7 @@ const HeaderComponent = () => {
     };
 
     return (
-      <Navbar fluid={true} rounded={true} className="font-outfit -mt-5">
+      <Navbar fluid={true} rounded={true} className="font-outfit">
         <Link href="/" className="flex items-center">
           <span className="self-center lg:ml-16 ml-auto uppercase text-2xl leading-10 font-raleway font-bold text-primary-0">
             Phonew

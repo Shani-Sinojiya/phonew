@@ -48,7 +48,7 @@ const Home = (props: props) => {
         if (filterUrl !== "") {
           const url =
             process.env.API_URL +
-            `/phones?populate=image,brand&sort[0]=createdAt:desc${filterUrl}`;
+            `/phones?populate=*&sort[0]=createdAt:desc${filterUrl}`;
           const res = await Phone.getPhones(url);
           const { data, meta } = res;
 
@@ -68,7 +68,7 @@ const Home = (props: props) => {
     }, [filterUrl]);
 
     const fetchData = async () => {
-      if (Pagination.page === 0 || Pagination.pageCount) {
+      if (Pagination.page === Pagination.pageCount) {
         setHasMore(false);
       } else {
         if (filterUrl !== "") {
@@ -82,11 +82,15 @@ const Home = (props: props) => {
           setData([...Data, ...allData] as data[]);
           setPagination(meta.pagination);
         } else {
-          const url =
+          const res = await Phone.getPhones(
             process.env.API_URL +
-            `/phones?populate=*&sort[0]=createdAt:desc` +
-            `&pagination[page]=${Pagination.page + 1}`;
-          const res = await Phone.getPhones(url);
+              `/phones?sort[0]=createdAt:desc&populate=*&pagination[page]=${
+                Pagination.page + 1
+              }`
+          );
+
+          console.log("clicked");
+
           const { data, meta } = res;
           const allData = Phone.toNormalFormatArray(data);
           setData([...Data, ...allData] as data[]);

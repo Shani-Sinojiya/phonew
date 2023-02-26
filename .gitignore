@@ -40,7 +40,9 @@ node_modules
 /frontend/*.tsbuildinfo
 /frontend/next-env.d.ts
 /frontend/.env
-
+/frontend/public/sitemap.xml
+/frontend/public/sitemap-0.xml
+/frontend/public/robots.txt
 
 ############# ###############
 # Backend
