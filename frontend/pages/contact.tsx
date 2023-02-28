@@ -125,66 +125,68 @@ const Contact = () => {
                 </h3>
               </div>
             </div>
-            <div className="col-span-3 flex justify-center items-center font-outfit flex-col gap-6">
-              <h2 className="text-primary-0 text-lg font-semibold max-md:mt-4">
-                You can also fill out the contact form below
-              </h2>
-              <form
-                className="grid grid-cols-2 gap-4 mx-auto"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-              >
-                <input
-                  required
-                  type="text"
-                  value={Name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Name *"
-                  className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
-                />
-                <input
-                  required
-                  type="email"
-                  value={Email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email *"
-                  className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
-                />
-                <textarea
-                  required
-                  value={Detail}
-                  onChange={(e) => setDetail(e.target.value)}
-                  placeholder="Details *"
-                  rows={3}
-                  className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border resize-none"
-                ></textarea>
-                <button
-                  className={classNames(
-                    "flex justify-center font-outfit font-semibold text-base rounded-full px-8 py-2",
-                    isSubmitting
-                      ? "cursor-not-allowed hover:text-white hover:bg-primary-1 "
-                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
-                    isSubmitted
-                      ? "bg-green-400 !text-white border-green-800 border hover:bg-green-600"
-                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
-                    isError
-                      ? "bg-red-500 !text-white border-red-500 border hover:bg-red-700"
-                      : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1"
-                  )}
-                  type="submit"
+            <div className="col-span-3 font-outfit">
+              <div className="flex-col gap-6 flex justify-center items-center md:ml-6">
+                <h2 className="text-primary-0 text-lg font-semibold max-md:mt-4">
+                  You can also fill out the contact form below
+                </h2>
+                <form
+                  className="grid grid-cols-2 gap-4 mx-auto"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                  }}
                 >
-                  {isError && <XMarkIcon className="w-6 h-6" />}
-                  {isSubmitting && <ArrowPathIcon className="w-6 h-6" />}
-                  {isSubmitted && <CheckIcon className="w-6 h-6" />}
-                  {show && "Submit"}
-                </button>
+                  <input
+                    required
+                    type="text"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name *"
+                    className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
+                  />
+                  <input
+                    required
+                    type="email"
+                    value={Email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email *"
+                    className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border"
+                  />
+                  <textarea
+                    required
+                    value={Detail}
+                    onChange={(e) => setDetail(e.target.value)}
+                    placeholder="Details *"
+                    rows={3}
+                    className="rounded-xl border-primary-2 text-base w-full text-primary-1 col-span-2 placeholder:text-primary-1 px-4 py-2 border resize-none"
+                  ></textarea>
+                  <button
+                    className={classNames(
+                      "flex justify-center font-outfit font-semibold text-base rounded-full px-8 py-2",
+                      isSubmitting
+                        ? "cursor-not-allowed hover:text-white hover:bg-primary-1 "
+                        : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
+                      isSubmitted
+                        ? "bg-green-400 !text-white border-green-800 border hover:bg-green-600"
+                        : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1",
+                      isError
+                        ? "bg-red-500 !text-white border-red-500 border hover:bg-red-700"
+                        : "hover:text-white hover:bg-primary-1 border-primary-1 border text-primary-1"
+                    )}
+                    type="submit"
+                  >
+                    {isError && <XMarkIcon className="w-6 h-6" />}
+                    {isSubmitting && <ArrowPathIcon className="w-6 h-6" />}
+                    {isSubmitted && <CheckIcon className="w-6 h-6" />}
+                    {show && "Submit"}
+                  </button>
 
-                <p className="font-semibold text-xs flex justify-center font-outfit text-primary-3 max-w-[11rem]">
-                  We will get back to you as soon as possible.
-                </p>
-              </form>
+                  <p className="font-semibold text-xs flex justify-center font-outfit text-primary-3 max-w-[11rem]">
+                    We will get back to you as soon as possible.
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ import {
 import { Navbar } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { memo, StrictMode, useEffect, useState } from "react";
+import { memo, StrictMode, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { classNames } from "@/lib";
 import { RootState } from "@/redux/rootReducer";
@@ -587,10 +587,47 @@ const HeaderComponent = () => {
     );
   };
 
+  const HeaderRef = useRef<HTMLDivElement>(null);
+
+  const ValueOFPageYOffset = useRef(0);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const lastScroll = ValueOFPageYOffset.current;
+      if (window.pageYOffset === 0 || router.asPath === "/contact") {
+        HeaderRef.current?.classList.remove("scroll-up");
+        HeaderRef.current?.classList.remove("scroll-down");
+        return;
+      }
+      if (
+        window.pageYOffset > lastScroll &&
+        !HeaderRef.current?.classList.contains("scroll-down")
+      ) {
+        HeaderRef.current?.classList.remove("scroll-up");
+        HeaderRef.current?.classList.add("scroll-down");
+      } else if (
+        window.pageYOffset < lastScroll &&
+        HeaderRef.current?.classList.contains("scroll-down")
+      ) {
+        HeaderRef.current?.classList.remove("scroll-down");
+        HeaderRef.current?.classList.add("scroll-up");
+      }
+
+      ValueOFPageYOffset.current = window.pageYOffset;
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StrictMode>
-      <NavBarForHeader />
-      <FilterSection />
+      <div id="header" ref={HeaderRef}>
+        <NavBarForHeader />
+        <FilterSection />
+      </div>
     </StrictMode>
   );
 };
@@ -598,3 +635,6 @@ const HeaderComponent = () => {
 const Header = memo(HeaderComponent);
 
 export default Header;
+function LegacyRef<T>() {
+  throw new Error("Function not implemented.");
+}

@@ -16,7 +16,7 @@ const HeaderFooterLayout = (props: props) => {
         </title>
       </Head>
       <Header />
-      {props.children}
+      <div className="containt pt-36">{props.children}</div>
       <Footer />
     </Fragment>
   );

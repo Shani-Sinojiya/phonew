@@ -49,7 +49,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="font-outfit">
+    <footer className="font-outfit left-0 w-screen">
       <div className="min-h-[5rem] bg-primary-0 flex justify-center items-center text-center gap-8">
         <div className="font-semibold text-white text-xl max-md:text-lg">
           Help us to improve

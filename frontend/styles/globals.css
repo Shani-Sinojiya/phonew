@@ -28,3 +28,21 @@
     font-stretch: normal;
   }
 }
+
+.scroll-down {
+  transform: translate3d(0, -100%, 0);
+}
+
+.scroll-up {
+  transform: translate3d(0, 0, 0);
+}
+
+#header {
+  @apply w-full fixed top-0 left-0 transition-all duration-300 ease-in-out;
+  filter: drop-shadow(0 -10px 20px rgb(170, 170, 170));
+  z-index: 999;
+}
+
+.containt {
+  @apply w-full h-full flex flex-col justify-center items-center;
+}
